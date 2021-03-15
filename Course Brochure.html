@@ -1,0 +1,2746 @@
+<!DOCTYPE html>
+<html data-sign="OSR OSL" async>
+  <head>
+    <title>Template title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="css/minireset.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+
+
+    <style>
+      @import url('https://outfit-assets-production.s3.amazonaws.com/fonts/uwa/stylesheet.css');
+      @import url('https://use.typekit.net/fxc6mtk.css');
+
+      /* Inputs order
+
+      {{show-crop}}
+
+
+      {{UWA_primary-faculty-colour--cbn}}
+      {{UWA_secondary-faculty-colour--cbn}}
+
+      {{#spreadsheet.UWA_contact-details--cbn}}{{/spreadsheet.UWA_contact-details--cbn}}
+
+      {{#collection.UWA_cover-page--cbn}}
+      {{#block.UWA_cover-page--cbn}}
+      {{UWA_layouts--cbn1}}
+      {{{UWA_abstract-blue-image--cbn1}}}
+      {{UWA_feature-image--cbn1}}
+      {{{UWA_gradient--cbn1}}}
+      {{{UWA_gradient-width--cbn1}}}
+      {{{UWA_gradient-opacity--cbn1}}}
+      {{{UWA_heading--cbn1}}}
+      {{UWA_heading-font--cbn1}}
+      {{UWA_heading-font-size--cbn1}}
+      {{heading-1-font-weight1}}
+      {{heading-2-font-weight1}}
+      {{heading-3-font-weight1}}
+      {{#collection.UWA_statistics--cbn}}{{/collection.UWA_statistics--cbn}}
+      {{UWA_statistic-width--cbn1}}
+      {{UWA_statistics-width-one-third-image-layout--cbn1}}
+      {{UWA_statistic-block-alignment--cbn1}}
+      {{UWA_statistic-block-position--cbn1}}
+      {{#collection.UWA_columns--cbn}}{{/collection.UWA_columns--cbn}}
+      {{UWA_body-content-alignment--cbn1}}
+      {{{UWA_website--cbn1}}}
+      {{/block.UWA_cover-page--cbn}}
+      {{/collection.UWA_cover-page--cbn}}
+      */
+
+      :root {
+        --blue: {{{account.colors.uwa-blue}}};
+        --gold: {{{account.colors.gold}}};
+        --purple: {{{account.colors.purple}}};
+        --red: {{{account.colors.red}}};
+        --orange: {{{account.colors.orange}}};
+        --yellow: {{{account.colors.yellow}}};
+        --green: {{{account.colors.green}}};
+        --teal: {{{account.colors.teal}}};
+        --mid-blue: {{{account.colors.mid-blue}}};
+        --cyan: {{{account.colors.cyan}}};
+        --tan: {{{account.colors.tan}}};
+        --silver: {{{account.colors.uwa-silver}}};
+
+        --white: {{{account.colors.white}}};
+        --black: {{{account.colors.black}}};
+
+        /*color for table with opacity 0.1 as default*/
+        --blue2: rgba(0, 48, 135, 0.1);
+        --black2: rgba(0,0,0,0.1);
+        --gold2:rgba(218, 170, 0, 0.1);
+
+        --blue3: rgba(0, 48, 135, 0.05);
+        --black3: rgba(0,0,0,0.05);
+        --gold3:rgba(218, 170, 0, 0.05);
+
+
+        /*font-family*/
+        --tt-norms-pro: 'TT Norms Pro';
+        --novel-pro: 'novel-pro';   
+
+        /*font-weight*/
+        --xLight: 200;
+        --light: 300;
+        --regular: 400;
+        --medium: 500;
+        --bold: 700;
+      }
+
+      .columnBackgroundColour--blue { --column-dynamic-background-colour: var(--blue3); --column-dynamic-dark-background-colour: var(--blue2); }
+      .columnBackgroundColour--black { --column-dynamic-background-colour: var(--black3); --column-dynamic-dark-background-colour: var(--black2); }
+      .columnBackgroundColour--gold { --column-dynamic-background-colour: var(--gold3); --column-dynamic-dark-background-colour: var(--gold2); }
+
+      .tableBorderColour--blue { --border-colour-dynamic: var(--blue); }
+      .tableBorderColour--black { --border-colour-dynamic: var(--black); }
+      .tableBorderColour--gold { --border-colour-dynamic: var(--gold); }
+
+      .primaryFacultyColour--blue { --dynamic-colour: var(--blue); }
+      .primaryFacultyColour--gold { --dynamic-colour: var(--gold); }
+      .secondaryFacultyColour--purple { --dynamic-colour: var(--purple); }
+      .secondaryFacultyColour--red { --dynamic-colour: var(--red); }
+      .secondaryFacultyColour--orange { --dynamic-colour: var(--orange); }
+      .secondaryFacultyColour--yellow { --dynamic-colour: var(--yellow); }
+      .secondaryFacultyColour--green { --dynamic-colour: var(--green); }
+      .secondaryFacultyColour--teal { --dynamic-colour: var(--teal); }
+      .secondaryFacultyColour--mid-blue { --dynamic-colour: var(--mid-blue); }
+      .secondaryFacultyColour--cyan { --dynamic-colour: var(--cyan); }
+      .secondaryFacultyColour--tan { --dynamic-colour: var(--tan); }
+
+      html {
+        font-family: 'TT Norms Pro';
+        color: var(--black);
+        word-break: break-word;
+      }
+
+      /* Helper classes */
+      .u-hide { display: none; }
+
+      /* Helper class for fixing Reposition tool bug */
+      .reposition-fix {
+        position: absolute;
+        overflow: hidden;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;        
+      }
+
+      .reposition-fix div {
+        top: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      .fit {
+        display: flex;
+        flex-direction: column;
+        padding: 45pt 45pt 43pt;
+      }
+
+      .header {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        margin-bottom: 20pt;
+        flex-shrink: 0;
+      }
+
+      .coverPageLayoutChoice--full-image .header {
+        height: 590pt;
+        margin-bottom: 30pt;
+        padding-top: 115pt;       
+      }
+
+      .coverPageLayoutChoice--half-image .header {
+        height: 388pt;
+        margin-bottom: 30pt;
+        padding-top: 100pt;
+      }
+
+      .coverPageLayoutChoice--one-third-image .header {
+        height: 244pt;
+        margin-bottom: 39pt;
+        padding-top: 0;
+        flex-direction: row;
+        justify-content: unset;
+        align-items: flex-start;
+      }
+
+      .hero {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+
+      .logo__container {
+        position: absolute;
+        top: 0;
+        display: flex;
+        width: 196pt;
+        height: 71pt;
+        background: var(--white);
+      }
+
+      .coverPageLayoutChoice--half-image .logo__container,
+      .coverPageLayoutChoice--full-image .logo__container {
+        right: 0;
+        justify-content: flex-end;
+        margin-right: -9pt;
+        padding: 0 9pt 15pt 19pt;
+      }
+
+      .coverPageLayoutChoice--one-third-image .logo__container {
+        left: 0;
+        padding: 0 9pt 15pt 6pt;
+        margin-left: -12pt;
+      }
+
+      .logo {
+        height: 100%;
+        max-width: 170pt;
+        object-fit: contain;
+        object-position: top right;
+      }
+
+      .logo--footer {
+        height: 38pt;
+        max-width: 111pt;
+        object-position: bottom right;
+        margin-left: 25pt;.
+      }
+
+      .abstract__container {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      } 
+
+      .abstract {
+        position: absolute;
+        left: -9pt;
+        right: -9pt;
+        top: 0;
+        bottom: 0;       
+        background-color: var(--dynamic-colour);
+      }
+
+      .coverPageLayoutChoice--half-image .abstract {
+        clip-path: polygon(0 0, 98% 0, 98% 61.4%, 100% 61.4%, 100% 100%, 2% 100%, 2% 38.6%, 0% 38.6%);
+        -webkit-clip-path: polygon(0 0, 98% 0, 98% 61.4%, 100% 61.4%, 100% 100%, 2% 100%, 2% 38.6%, 0% 38.6%);
+        -moz-clip-path: polygon(0 0, 98% 0, 98% 61.4%, 100% 61.4%, 100% 100%, 2% 100%, 2% 38.6%, 0% 38.6%);
+      }
+
+      .coverPageLayoutChoice--full-image .abstract {
+        clip-path: polygon(0 0, 98% 0, 98% 60.7%, 100% 60.7%, 100% 100%, 3% 100%, 2% 25.4%, 0% 25.4%);
+        -webkit-clip-path: polygon(0 0, 98% 0, 98% 60.7%, 100% 60.7%, 100% 100%, 3% 100%, 2% 25.4%, 0% 25.4%);
+        -moz-clip-path: polygon(0 0, 98% 0, 98% 60.7%, 100% 60.7%, 100% 100%, 3% 100%, 2% 25.4%, 0% 25.4%);
+      }
+
+      .coverPageLayoutChoice--one-third-image .abstract {
+        clip-path: polygon(0 0, 98% 0, 98% 54.8%,100% 54.8%, 100% 100%, 0% 100%);
+        -webkit-clip-path: polygon(0 0, 98% 0, 98% 54.8%,100% 54.8%, 100% 100%, 0% 100%);
+        -moz-clip-path: polygon(0 0, 98% 0, 98% 54.8%,100% 54.8%, 100% 100%, 0% 100%);
+        left: 0;
+      }
+
+      .backgroundColor {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: var(--dynamic-colour);
+      }
+
+      .heading {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        position: relative;
+        max-height: 235pt; 
+        margin-left: -9pt;        
+        font-size: 28pt;                
+      }
+
+      .coverPageLayoutChoice--one-third-image .heading {       
+        margin-bottom: -11pt;
+        flex: 1;
+        align-self: flex-end;
+        max-height: 165pt;
+      }
+
+      .coverPageLayoutChoice--full-image .heading {
+        margin-bottom: 46pt;  
+      }
+
+      .coverPageLayoutChoice--half-image .heading {
+        margin-bottom: -15pt;   
+      }
+
+      .heading .token-value {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .heading h1,
+      .heading h2,
+      .heading h3 {
+        background: var(--white);
+        margin-top: -1px;
+      }
+
+      .heading h1 {
+        font-size: calc(1em + {{#collection.UWA_cover-page--cbn}}{{#block.UWA_cover-page--cbn}}{{{UWA_heading-font-size--cbn1}}}{{^UWA_heading-font-size--cbn1}}0{{/UWA_heading-font-size--cbn1}}{{/block.UWA_cover-page--cbn}}{{/collection.UWA_cover-page--cbn}}pt);
+        line-height: 1.15em;
+        letter-spacing: 0.9pt;
+        font-family: var(--novel-pro);
+      }
+
+      .coverPageLayoutChoice--full-image .heading h1,
+      .coverPageLayoutChoice--half-image .heading h1 { padding: 7pt 15pt 9pt 10pt; }
+      .coverPageLayoutChoice--one-third-image .heading h1 { padding: 4.5pt 17pt 5.5pt 10pt; }
+
+      /* START line-height problem solving for different font family*/
+      .coverPageLayoutChoice--full-image.swap-font .heading h1,
+      .coverPageLayoutChoice--half-image.swap-font .heading h1,
+      .coverPageLayoutChoice--full-image.tt-norms .heading h1,
+      .coverPageLayoutChoice--half-image.tt-norms .heading h1 {
+        padding: 9pt 15pt 7pt 10pt;
+      }
+
+      .coverPageLayoutChoice--one-third-image.swap-font .heading h1,
+      .coverPageLayoutChoice--one-third-image.tt-norms .heading h1 {
+        padding: 5.5pt 17pt 4.5pt 10pt;
+      }
+      /* END line-height problem solving for different font family*/
+
+      .heading h2 {
+        font-size: calc(1em + {{#collection.UWA_cover-page--cbn}}{{#block.UWA_cover-page--cbn}}{{{UWA_heading-font-size--cbn1}}}{{^UWA_heading-font-size--cbn1}}0{{/UWA_heading-font-size--cbn1}}{{/block.UWA_cover-page--cbn}}{{/collection.UWA_cover-page--cbn}}pt);
+        line-height: 1.15em;
+        letter-spacing: 1pt;
+        font-family: var(--tt-norms-pro);
+      }
+
+      .coverPageLayoutChoice--full-image .heading h2,
+      .coverPageLayoutChoice--half-image .heading h2 { padding: 9pt 15pt 7pt 10pt;  }
+      .coverPageLayoutChoice--one-third-image .heading h2 { padding: 5.5pt 17pt 4.5pt 10pt; }
+
+      /* START line-height problem solving for different font family*/
+      .coverPageLayoutChoice--full-image.swap-font .heading h2,
+      .coverPageLayoutChoice--half-image.swap-font .heading h2,
+      .coverPageLayoutChoice--full-image.novel-pro .heading h2,
+      .coverPageLayoutChoice--half-image.novel-pro .heading h2 {
+        padding: 7pt 15pt 9pt 10pt;
+      }
+
+      .coverPageLayoutChoice--one-third-image.swap-font .heading h2,
+      .coverPageLayoutChoice--one-third-image.novel-pro .heading h2 {
+        padding: 4.5pt 17pt 5.5pt 10pt;
+      }
+      /* END line-height problem solving for different font family*/
+
+
+      .swap-font .heading h1 { font-family: var(--tt-norms-pro); }
+      .swap-font .heading h2 { font-family: var(--novel-pro); }
+      .tt-norms .heading h1,
+      .tt-norms .heading h2 { font-family: var(--tt-norms-pro); }
+      .novel-pro .heading h1,
+      .novel-pro .heading h2 { font-family: var(--novel-pro); }
+
+      .heading h3 {
+        font-size: calc(0.675em + {{#collection.UWA_cover-page--cbn}}{{#block.UWA_cover-page--cbn}}{{{UWA_heading-font-size--cbn1}}}{{^UWA_heading-font-size--cbn1}}0{{/UWA_heading-font-size--cbn1}}{{/block.UWA_cover-page--cbn}}{{/collection.UWA_cover-page--cbn}}pt);
+        line-height: 1.15em;
+      }
+
+      .coverPageLayoutChoice--full-image .heading h3,
+      .coverPageLayoutChoice--half-image .heading h3 {
+        padding: 7pt 14pt 7pt 10pt;
+      }
+
+      .coverPageLayoutChoice--one-third-image .heading h3 {
+        font-size: calc(0.625em + {{#collection.UWA_cover-page--cbn}}{{#block.UWA_cover-page--cbn}}{{{UWA_heading-font-size--cbn1}}}{{^UWA_heading-font-size--cbn1}}0{{/UWA_heading-font-size--cbn1}}{{/block.UWA_cover-page--cbn}}{{/collection.UWA_cover-page--cbn}}pt);
+        padding: 4pt 14pt 4pt 10pt;
+      }
+
+      /* Heading Font Weight Definition */
+      .heading1FontWeight--regular h1,
+      .heading2FontWeight--regular h2,
+      .heading3FontWeight--regular h3 {
+        font-weight: var(--normal);
+      }
+
+      .quoteFontWeight--regular .quote__copy,
+      .tableHeading1FontWeight--light .tableHeading--primary,
+      .tableHeading2FontWeight--light .tableHeading--secondary {
+        font-weight: var(--xLight);
+      }
+
+      .heading1FontWeight--medium h1,
+      .heading2FontWeight--medium h2,
+      .heading3FontWeight--medium h3,
+      .quoteFontWeight--medium .quote__copy,
+      .tableHeading1FontWeight--medium .tableHeading--primary,
+      .tableHeading2FontWeight--medium .tableHeading--secondary {
+        font-weight: var(--medium);
+      }
+
+      .heading1FontWeight--bold h1,
+      .heading2FontWeight--bold h2,
+      .heading3FontWeight--bold h3,
+      .quoteFontWeight--bold .quote__copy,
+      .tableHeading1FontWeight--bold .tableHeading--primary,
+      .tableHeading2FontWeight--bold .tableHeading--secondary  {
+        font-weight: var(--bold);
+      }
+
+      .quote__heading {
+        margin-bottom: 9pt;
+        font-size: 12.7pt;
+        line-height: 1.2em;
+      }
+
+      .quote__heading h4 {
+        font-size: 1em;
+      }
+
+      .statistic__container {
+        display: none;
+        position: relative;
+        min-height: 70pt;
+        margin-right: -9pt;      
+        background-color: var(--white);
+      }
+
+      .statisticPosition--right .statistic__container { justify-content: flex-end; }
+      .statisticPosition--centre .statistic__container { justify-content: center; }
+      .statisticPosition--centre.statistic--fixed .statistic__container { align-self: center; }
+
+      .coverPageLayoutChoice--full-image .statistic__container--header {
+        display: flex;
+        padding-top: 11pt;
+      }
+
+      .coverPageLayoutChoice--one-third-image .statistic__container--header {
+        max-height: 244pt;
+        display: flex;        
+        flex-direction: column;
+        justify-content: flex-start;
+        padding-top: 0;
+        margin-right: 0;
+        margin-left: 40pt;
+        background-color: unset;
+      }
+
+      .coverPageLayoutChoice--half-image .statistic__container--body {
+        display: flex;
+        margin-bottom: 27pt;
+      }
+
+      .coverPageLayoutChoice--full-image .statistic__container {
+        flex: unset;
+      }
+
+      .statistic {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex: 1;
+        height: 70pt;
+        padding: 0 4pt;
+        text-align: center;       
+      }
+
+      .coverPageLayoutChoice--full-image .statistic {
+        min-height: 1.64rem;
+      }
+
+      .coverPageLayoutChoice--full-image .statistic,
+      .coverPageLayoutChoice--half-image .statistic {
+        border-right: 1pt solid var(--dynamic-colour);
+        background: var(--white);
+      }
+
+      .coverPageLayoutChoice--one-third-image .statistic {
+        padding: 4pt;
+        border-bottom: 1pt solid var(--white);
+      }
+      .coverPageLayoutChoice--one-third-image.gradientChoice--white-gradient .statistic {
+        border-bottom: 1pt solid var(--black);
+      }
+
+      .statistic--fixed .statistic {
+        width: fit-content;
+      }
+      .statistic--variable .statistic__container { width: auto; }
+
+      .statistic--variable .statistic {
+        max-width: auto;
+        min-width: 2.1rem; }
+
+      .statistic--fixed .statistic{
+        max-width: 2.1rem;
+        min-width: 2.1rem;
+      }
+
+      .coverPageLayoutChoice--one-third-image.statistic--fixed .statistic,
+      .coverPageLayoutChoice--one-third-image.statistic--variable .statistic {
+        max-width: 1.73rem;
+        min-width: 1.73rem;
+        max-height: 1.73rem;
+        min-height: 1.73rem;       
+      }
+
+      .coverPageLayoutChoice--one-third-image.statisticWidthOneThird--wide.statistic--fixed .statistic,
+      .coverPageLayoutChoice--one-third-image.statisticWidthOneThird--wide.statistic--variable .statistic {
+        max-width: 3.46rem;
+        min-width: 3.46rem;
+      }   
+
+      .statisticAlignment--left .statistic { text-align: left; }
+      .statisticAlignment--right .statistic { text-align: right; }
+
+      .coverPageLayoutChoice--half-image .statistic:first-child,
+      .coverPageLayoutChoice--full-image .statistic:first-child {
+        border-left: 1pt solid var(--dynamic-colour);
+      }
+
+      /*  .coverPageLayoutChoice--one-third-image .statistic:first-child {
+      border-top: 1pt solid var(--white);
+      }*/
+
+      .statistic__text {
+        text-transform: uppercase;
+        color: var(--dynamic-colour);
+      }
+
+      .coverPageLayoutChoice--one-third-image .statistic__text {  
+        color: var(--white);
+      }
+
+      .coverPageLayoutChoice--one-third-image.gradientChoice--white-gradient .statistic__text {
+        color: var(--black);
+      }
+
+      .statistic__text h3 {
+        font-size: 20pt;
+      }    
+
+      .statistic__text h4 {
+        font-size: 13pt;
+      }      
+
+      .statistic__text h3,
+      .statistic__text h4 {       
+        font-weight: var(--bold);
+        line-height: 1em;   
+      }
+
+      .statistic__text h5 {
+        font-size: 7.7pt;
+        line-height: 1em;
+      }
+
+      .statistic__text p {
+        font-size: 6.7pt;
+        line-height: 1.2em;
+      }
+
+      .body {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        overflow: hidden;
+        word-break: break-word;
+      }
+
+      .column__container {
+        display: flex;
+        flex: 1;
+        margin-left: -15pt;
+        align-items: flex-start;
+        overflow: hidden;
+      }
+
+      .column__container.bodyContentAlignment--bottom {
+        align-items: flex-end;
+      }
+
+      .column__containerInner {
+        flex: 1;
+      }
+
+      .column {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        margin-left: 15pt;
+      }
+
+      .column--backPage {
+        margin-bottom: 11pt;
+      }
+
+      .column--backPage:last-child {
+        margin-bottom: 0;
+      }
+
+      .quote__container {
+        display: flex;
+      }
+
+       [data-column-counter-count="3"] .quote__container,
+      .hasThreeColumns .quote__container {
+        display: flex;
+        flex-direction: column;
+        max-height: none;
+      }
+
+      [data-column-counter-count="3"] .quote__image,
+      .hasThreeColumns .quote__image {
+        width: 100%;
+        margin-right: 0;
+      }
+
+      [data-column-counter-count="3"] .quote__divider,
+      .hasThreeColumns .quote__divider {
+        margin: 10pt 0;
+        width: 100%;
+        height: 1pt;
+      }
+
+      [data-column-counter-count="3"] .quote,
+      .hasThreeColumns .quote {
+        align-self: normal;
+        max-height: none;
+      }
+
+      .quote__image {
+        position: relative;
+        width: 90pt;
+        height: 90pt;
+        margin: 0pt 11pt 0 0;
+      }
+
+      .quote__divider {
+        width: 1pt;
+        margin-right: 13pt;
+        background: var(--dynamic-colour);
+      }
+
+      .quote__divider--backPage {
+        background: var(--dynamic-colour);
+      }
+
+      .quote {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        align-self: center;
+        font-size: 15pt;
+        max-height: 155px;
+      }
+      
+      [data-column-counter-count="2"] .quote,
+      [data-column-counter-count="3"] .quote,
+      .hasThreeColumns .quote,
+      .hasTwoColumns .quote {
+        max-height: unset;
+      }
+
+      .quote__copy {
+        font-size: 11pt;
+        line-height: 1.45em;
+        font-family: var(--novel-pro);
+      }
+
+      .quote__author {
+        text-transform: uppercase;
+        font-size: 10.4pt;
+        line-height: 1.2em;
+        font-weight: var(--light);
+        max-height: 42px; 
+      }
+
+      [data-column-counter-count="2"] .quote__author,
+      .hasTwoColumns .quote__author { max-height: 70px; }
+      
+      [data-column-counter-count="3"] .quote__author,
+      .hasThreeColumns .quote__author{ max-height: 68px; }
+
+      .quote__copy + .quote__author {
+        margin-top: 9pt;
+      }
+
+      .text .tinymce_style--light {
+        color: var(--dynamic-colour);
+      }
+
+      .text {
+        font-weight: var(--light);
+      }
+
+      .text h4 {
+        font-size: 8.7pt;
+        line-height: 1.3em;
+        font-weight: var(--medium);
+      }     
+      .is-export-mode .text h4 { font-size: 8.6pt; }
+
+      .text h3 {
+        font-size: 11pt;
+        line-height: 1.5em; 
+        font-weight: var(--medium);
+      }   
+      .is-export-mode .text h3 { font-size: 10.9pt; }
+
+      .text p {
+        margin-bottom: 13pt;
+        font-size: 8.8pt;
+        line-height: 1.5em;
+      }
+      .is-export-mode .text p { font-size: 8.7pt; }
+
+      .text a {
+        text-decoration: none;
+        color: var(--dynamic-colour);
+      }
+
+      .text ul {
+        margin-bottom: 13pt;
+        padding-left: 9pt;
+      }
+
+      .text li {
+        position: relative;
+        font-size: 8.8pt;
+        line-height: 1.5em;
+      }
+      .is-export-mode .text li { font-size: 8.7pt; }
+
+      .text li:before {
+        content: "\2022";
+        position: absolute;
+        top: -1px;  
+        left: -10pt;
+        font-size: 16pt;      
+      }
+
+      .text h4:last-child,
+      .text h3:last-child,
+      .text p:last-child,
+      .text ul:last-child {
+        margin-bottom: 0;
+      }
+
+      .partnerLogo__container {
+        display: flex;
+        margin-left: -20pt;
+      }
+
+
+      [data-column-counter-count="3"] [data-plc-logo-count="2"].partnerLogo__container,
+      .hasThreeColumns [data-plc-logo-count="2"].partnerLogo__container { margin-left: -14pt; }
+
+      [data-column-counter-count="3"] [data-plc-logo-count="3"].partnerLogo__container,
+      .hasThreeColumns [data-plc-logo-count="3"].partnerLogo__container {margin-left: -12pt; }
+
+      [data-column-counter-count="3"] [data-plc-logo-count="4"].partnerLogo__container,
+      .hasThreeColumns [data-plc-logo-count="4"].partnerLogo__container { margin-left: -8pt; }
+
+      .partnerLogo {
+        height: 30pt;
+        max-width: 25%;
+        object-fit: contain;
+        object-position: left center;
+        margin-left: 20pt;
+      }
+
+      /* START horizontal and vertical positioning */
+      [data-partner-logo-vertical-alignment="top"].partnerLogo__container { align-items: flex-start; }
+      [data-partner-logo-vertical-alignment="center"].partnerLogo__container { align-items: center; }
+      [data-partner-logo-vertical-alignment="bottom"].partnerLogo__container { align-items: flex-end; }
+
+      [data-partner-logo-horizontal-alignment="left"].partnerLogo__container { justify-content: flex-start; }
+      [data-partner-logo-horizontal-alignment="center"].partnerLogo__container { justify-content: center; }
+      [data-partner-logo-horizontal-alignment="right"].partnerLogo__container { justify-content: flex-end; }
+
+      [data-partner-logo-horizontal-alignment="left"][data-partner-logo-vertical-alignment="top"] .partnerLogo { object-position: left top; }
+      [data-partner-logo-horizontal-alignment="left"][data-partner-logo-vertical-alignment="center"] .partnerLogo { object-position: left center; }
+      [data-partner-logo-horizontal-alignment="left"][data-partner-logo-vertical-alignment="bottom"] .partnerLogo { object-position: left bottom; }
+
+      [data-partner-logo-horizontal-alignment="center"][data-partner-logo-vertical-alignment="top"] .partnerLogo { object-position: center top; }
+      [data-partner-logo-horizontal-alignment="center"][data-partner-logo-vertical-alignment="center"] .partnerLogo { object-position: center center; }
+      [data-partner-logo-horizontal-alignment="center"][data-partner-logo-vertical-alignment="bottom"] .partnerLogo { object-position: center bottom; }
+
+      [data-partner-logo-horizontal-alignment="right"][data-partner-logo-vertical-alignment="top"] .partnerLogo { object-position: right top; }
+      [data-partner-logo-horizontal-alignment="right"][data-partner-logo-vertical-alignment="center"] .partnerLogo { object-position: right center; }
+      [data-partner-logo-horizontal-alignment="right"][data-partner-logo-vertical-alignment="bottom"] .partnerLogo { object-position: right bottom; }
+      /* END horizontal and vertical positioning */
+
+      [data-plc-logo-orientation="landscape"].partnerLogo { height: 30pt; }
+      [data-plc-logo-orientation="square"].partnerLogo { height: 45pt; }
+      [data-plc-logo-orientation="portrait"].partnerLogo { height: 52pt; }
+
+      [data-plc-logo-count="1"] .partnerLogo { max-width: calc(100% - 20pt); }
+      [data-plc-logo-count="2"] .partnerLogo { max-width: calc(50% - 20pt); }  
+      [data-plc-logo-count="3"] .partnerLogo { max-width: calc(33% - 20pt); }
+      [data-plc-logo-count="4"] .partnerLogo { max-width: calc(25% - 20pt); }
+
+      [data-column-counter-count="3"] [data-plc-logo-count="2"] .partnerLogo,
+      .hasThreeColumns [data-plc-logo-count="2"] .partnerLogo { margin-left: 14pt;  max-width: calc(50% - 14pt); }
+
+      [data-column-counter-count="3"] [data-plc-logo-count="3"] .partnerLogo,
+      .hasThreeColumns [data-plc-logo-count="3"] .partnerLogo { margin-left: 12pt;  max-width: calc(33% - 12pt); }  
+
+      [data-column-counter-count="3"] [data-plc-logo-count="4"] .partnerLogo,
+      .hasThreeColumns [data-plc-logo-count="4"] .partnerLogo { margin-left: 8pt;  max-width: calc(25% - 8pt); }
+
+      .dataTable {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .dataTable__row {
+        display: flex;
+        border-bottom: 1pt solid var(--black);
+      }
+
+      .hasThreeColumns .dataTable__row { flex-direction: column; }
+
+      .dataTable__row:first-child {
+        border-top: 1pt solid var(--black);
+      }
+
+      .hasThreeColumns .dataTable__row:first-child { border-top: none; }
+
+      .dataTable__cell {
+        flex: 1;
+        padding: 1.7pt 0;
+        font-size: 8.3pt;
+        line-height: 1.3em;
+        font-weight: var(--light);
+      }
+
+      .hasThreeColumns .dataTable__cell {
+        padding: 0.5pt 0 0; 
+      }
+
+      .dataTable__cell--firstCell {
+        flex: unset;
+        width: auto;
+        padding-right: 8pt;
+        padding-left: 4pt;
+        font-size: 8.3pt;
+        font-weight: var(--bold);
+        text-transform: uppercase; 
+      }
+
+      .hasThreeColumns .dataTable__cell--firstCell { 
+        padding-right: 0pt; 
+        width: auto !important;
+      }
+
+      .breakOut {
+        padding: 11pt;
+        background: var(--silver);
+      }
+
+      .callout {
+        padding-left: 6pt;
+        border-left: 1.5pt solid var(--dynamic-colour);
+      }
+
+      .callout__text,
+      .breakOut__text {
+        font-size: 9.3pt;
+        line-height: 1.4;
+        font-weight: var(--light);
+      }    
+
+      .breakOut__text h3 {
+        font-size: 11pt;
+        line-height: 1.5em;
+        font-weight: var(--medium);
+      }  
+
+      .breakOut__text h4 {
+        font-size: 8.7pt;
+        line-height: 1.3em;
+        font-weight: var(--medium);
+      }
+
+      .callout__text a,
+      .breakOut__text a {
+        text-decoration: none;
+        color: var(--dynamic-colour);
+        font-weight: var(--bold);
+      }         
+
+      .quote__container,
+      .text,
+      .partnerLogo__container,
+      .dataTable,
+      .callout,
+      .breakOut,
+      .flexibleTable {
+        margin-bottom: 15pt;
+      }
+
+      .quote__container:last-child,
+      .text:last-child,
+      .partnerLogo__container:last-child,
+      .dataTable:last-child,
+      .callout:last-child,
+      .breakOut:last-child{
+        margin-bottom: 0;
+      }
+
+      .footer {
+        display: none;
+        margin-top: 20pt;
+        font-size: 0;
+      }   
+
+      .page--backPage .footer {
+        margin-top: 7pt;
+      }
+
+      .showInternationalDetails--hide .footer--getInTouchDetails {
+        display: flex;
+        align-items: flex-end;
+      }
+
+      .showInternationalDetails--show .footer--internationalDetails {
+        display: flex;
+        align-items: flex-end;
+      }
+
+      .coverPageLayoutChoice--full-image .footer--onlyWebsite,
+      .coverPageLayoutChoice--half-image .footer--onlyWebsite {
+        display: block;
+      }
+
+      .coverPageLayoutChoice--full-image .footer--onlyWebsite{
+        margin-top: 12pt;
+      }
+
+      .coverPageLayoutChoice--full-image .footer--contactDetailsAndLogo,
+      .coverPageLayoutChoice--half-image .footer--contactDetailsAndLogo {
+        display: none;
+      }
+
+      .website {
+        font-size: 14.3pt;
+        line-height: 1.2em;
+        font-weight: var(--bold);
+        text-align: right;
+        color: var(--dynamic-colour);
+      }
+
+      .contactDetails__containerWrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .contactDetails__container {
+        flex: 1;     
+        display: flex;
+        flex-direction: column;
+        color: var(--dynamic-colour);
+      }
+
+      .contactDetails__container--international {
+        margin-top: 20pt;
+      }
+
+      .contactDetails__containerItem {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .contactDetails__heading {
+        position: relative;
+        font-size: 9.87pt;
+        line-height: 1.2em;
+        font-weight: var(--bold);
+        text-transform: uppercase;
+      }
+
+      .footer--internationalDetails .contactDetails__heading {
+        letter-spacing: 1.5pt;
+      }
+
+      .contactDetails__decoration {
+        position: absolute;
+        top: 6pt;
+        left: -36pt;
+        width: 28pt;
+        height: 1.5pt;
+        background-color: var(--dynamic-colour);
+      }
+
+      .contactDetails__row {
+        display: flex;
+      }
+
+      .contactDetails {
+        min-width: 17.5%;
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;       
+        padding: 0 9pt 0 8pt;
+        border-right: 1pt solid var(--dynamic-colour);
+      }
+
+      .contactDetails:first-child {
+        padding-left: 0;
+      }
+
+      .footer--internationalDetails .contactDetails {
+        min-width: unset;
+      }
+
+      .contactDetails__text,
+      .contactDetails__text h1 {
+        font-size: 8pt;
+        line-height: 1.25em;
+        color: var(--dynamic-colour);      
+      }
+
+      .contactDetails__text h1 { 
+        font-weight: var(--bold);
+      }
+
+      .contactDetails__text--value {
+        font-size: 7.1pt;
+      }
+
+      .contactDetails__heading + .contactDetails__row {
+        margin-top: 11pt;
+      }
+
+      .headingBack h2 {
+        margin-bottom: 20pt;
+        font-weight: var(--medium);
+        font-size: 18pt;
+        line-height: 1.2em;
+      }
+
+      .headingBack h2 sup,
+      .headingBack h2 sub {
+        font-size: 0.67em;
+      }
+
+      .headingBack h2 sup {
+        top: -0.15em;
+      }
+
+      .headingBack h2 sub {
+        top: 0.15em;
+      }
+
+      .topBar {
+        display: none;
+        width: 163pt;
+        height: 23pt;
+        background: var(--dynamic-colour);
+        position: absolute;
+        top: 0;
+      }
+
+      .showTopBar--show .topBar {
+        display: block;
+      }
+
+      .image {
+        position: relative;
+        width: 100%;
+        margin-bottom: 20pt;
+      }
+
+      .image:last-child {
+        margin-bottom: 0
+      }
+
+      .planTable__container:not(:last-child) {
+        margin-bottom: 20pt;
+      }
+
+      .planTable__heading {
+        font-size: 11pt;
+        line-height: 1.4em;
+        font-weight: var(--medium);
+      }
+
+      .planTable__text { 
+        font-size: 9.1pt;
+        line-height: 1.4em;
+        font-weight: var(--light);
+      }
+
+      .planTable {
+        display: flex;
+        flex-direction: column;
+        margin: 8pt 0;
+        border-top: 1px solid var(--black);
+        border-bottom: 1px solid var(--black); 
+      }
+
+      .planTable__year {
+        display: flex;
+      }
+
+      .yearIndex {
+        align-self: center;
+        width: 21pt;
+        margin: 5pt 6pt 5pt 0;
+        font-size: 8.7pt;
+        line-height: 1.2em;
+        font-weight: var(--bold);
+      }
+
+      .yearIndex, .period {
+        text-transform: uppercase;
+      }
+
+      .subject__container {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+      }
+
+      .subject__row {
+        display: flex;
+        border-bottom: 1px solid var(--black);
+        min-height: 23.5pt;
+      }
+
+      .planTable__year:last-child .subject__row:last-child { border-bottom: none; }
+
+      .period {
+        align-self: center;
+        padding: 3pt 3pt 3pt 0;
+        font-size: 8.2pt;
+        line-height: 1.2em;
+        font-weight: var(--bold);
+        width: 30pt;
+      }
+
+      .subject__rowInner {
+        display: flex;
+        flex: 1;
+      }
+
+      .subject {
+        width: 25%;
+        padding: 2pt 5pt;
+        border-left: 3pt solid var(--orange);
+      }
+
+      [data-ptc-color="orange"], [data-ptc-color="o"] { border-left-color: var(--orange); }
+      [data-ptc-color="green"], [data-ptc-color="g"] { border-left-color: var(--green); }
+      [data-ptc-color="light blue"], [data-ptc-color="lb"] { border-left-color: var(--cyan); }
+      [data-ptc-color="purple"], [data-ptc-color="p"] { border-left-color: var(--purple); }
+      [data-ptc-color="blue"], [data-ptc-color="b"] { border-left-color: var(--blue); }
+      [data-ptc-color="yellow"], [data-ptc-color="y"] { border-left-color: var(--yellow); }
+
+      .subject__text {
+        font-size: 8.2pt;
+        line-height: 1.2em;
+      }      
+
+      .key__container {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 4pt;
+      }
+
+      .key__label {
+        margin-right: 2pt;
+        font-weight: var(--bold);
+      }
+
+      .key {
+        display: flex;
+        align-items: center;
+        margin-right: 4pt;
+      }
+
+      .key__color {
+        width: 7pt;
+        height: 7pt;
+        margin-right: 2pt;
+      }
+
+      .key__color--orange { background: var(--orange); }
+      .key__color--green { background: var(--green); }
+      .key__color--lightBlue { background: var(--cyan); }
+      .key__color--purple { background: var(--purple); }
+      .key__color--blue { background: var(--blue); }
+      .key__color--yellow { background: var(--yellow); } 
+
+      .key__text,
+      .planTable__note,
+      .key__label {
+        font-size: 7pt;
+        line-height: 1.2em;
+      }
+
+      .cricos__container {
+        display: none;
+        position: absolute;
+        bottom: 19pt;
+        left: 45pt;
+      }
+
+      .cricos,
+      .exportId {
+        margin-right: 6.3pt;
+        font-size: 6.1pt;
+        line-height: 1.2em;
+      }
+
+      .statistic__container.overflow:hover:after {
+        font-size: 0.25em;
+      }
+
+      .statistic__container.overflow::before {
+        font-size: 0.3em;
+      }
+
+      /***** START Flexible Table Block Styling *****/
+      .tableGrid {
+        display: grid;
+        grid-template-rows: auto;
+        margin-bottom: 0.12rem;
+      }            
+
+      .tableGrid:last-child { margin-bottom: 0; }
+
+      .tableGrid__item {
+        padding: 0.07rem 0.12rem;
+        font-size: 0.206em;
+        line-height: 1em;
+      }
+
+      .tableGrid__item--heading { color: unset; }
+
+      .tableGrid__item--data { background-color: var(--column-dynamic-background-colour); }
+
+      .flexibleTable__item--data { background-color: var(--column-dynamic-background-colour); }
+
+      .tableGrid__item--heading { font-weight: var(--bold); }
+
+      .tableGrid__item h1 { 
+        font-size: 1.2em; 
+        font-weight: var(--bold);
+      }
+
+      .tableGrid__item h2 { 
+        font-size: 1.1em; 
+        font-weight: var(--bold);
+      }
+
+      .tableGrid__item kbd {
+        font-family: inherit;
+        color: var(--blue);
+      }
+
+      table {
+        display: table;
+        table-layout: fixed;
+        width: 100%;
+        border-collapse: separate;
+      }
+
+      .flexibleTable { 
+        /*margin-bottom: 0.23rem; */
+        border: 1px solid transparent;
+        border-collapse: collapse;
+      }
+
+      .flexibleTable td {
+        padding: 0.07rem 0.12rem;
+        font-size: 0.206em;
+        line-height: 1em;
+        max-width: 16%;
+      }
+
+      .flexibleTable__item--heading { font-weight: var(--bold); }
+
+      .flexibleTable__row + .flexibleTable__row { margin-top: 0.23rem; }
+
+      .flexibleTable td kbd { 
+        font-family: inherit;
+        color: var(--blue); 
+      }
+
+      .flexibleTable td h1 { 
+        font-size: 1.2em; 
+        font-weight: var(--bold);
+      }
+
+      .flexibleTable td h2 { 
+        font-size: 1.1em; 
+        font-weight: var(--bold);
+      }
+
+      /*Adding additional styling for tables for tableColourTheme input*/
+      .tableGrid--twoColumnTable > .tableGrid__item:nth-child(-n+2),
+      .tableGrid--threeColumnTable > .tableGrid__item:nth-child(-n+3),
+      .flexibleTable__row--header {
+        background-color: white !important;
+      }
+
+      .tableGrid--twoColumnTable.tableColourTheme--rows > .tableGrid__item:nth-child(4n-1),
+      .tableGrid--twoColumnTable.tableColourTheme--rows > .tableGrid__item:nth-child(4n),
+      .tableGrid--threeColumnTable.tableColourTheme--rows > .tableGrid__item:nth-child(6n+4),
+      .tableGrid--threeColumnTable.tableColourTheme--rows > .tableGrid__item:nth-child(6n+5),
+      .tableGrid--threeColumnTable.tableColourTheme--rows > .tableGrid__item:nth-child(6n+6) {
+        background-color: var(--column-dynamic-dark-background-colour);
+      }
+
+      .tableGrid--twoColumnTable.tableColourTheme--columns > .tableGrid__item:nth-child(even),
+      .tableGrid--threeColumnTable.tableColourTheme--columns .tableGrid__item--dark {
+        background-color: var(--column-dynamic-dark-background-colour);
+      }
+
+      .tableColourTheme--rows .flexibleTable__row--data:nth-child(even) {
+        background-color: var(--column-dynamic-dark-background-colour);
+      }
+
+      .tableColourTheme--columns .flexibleTable__item--data:nth-child(even) {
+        background-color: var(--column-dynamic-dark-background-colour);
+      }
+
+
+      /* Helper class for table error handling */
+      .invalid-table {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid red;
+        background: rgba(0, 0, 0, 0.3);        
+      }
+
+      .invalid-table::after {
+        content: 'Sum of your table columns exceeds 100%';
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 0.5em;
+        font-size: 0.2rem;
+        font-weight: var(--bold);
+        background: red;
+        color: white;
+      }
+
+      [data-ptc-error-message].invalid-table::after { content: attr(data-ptc-error-message); }
+
+      .styledBorder-column.tableGrid > .tableGrid__item { border-bottom: 1px solid var(--border-colour-dynamic); }
+
+      .styledBorder-row.tableGrid > .tableGrid__item { border-left: 1px solid var(--border-colour-dynamic); }
+      .styledBorder-row.tableGrid--twoColumnTable > .tableGrid__item:nth-child(2n) { border-left: unset; }
+      .styledBorder-row.tableGrid--threeColumnTable > .tableGrid__item:nth-child(3n-1) { border-left: unset; }
+
+      .styledBorder-top-and-bottom.tableGrid--twoColumnTable > .tableGrid__item:nth-last-child(-n+2) { border-bottom: 1px solid var(--border-colour-dynamic); }
+      .styledBorder-top-and-bottom.tableGrid--twoColumnTable > .tableGrid__item:nth-child(-n+3) { border-bottom: 1px solid var(--border-colour-dynamic); }
+      .styledBorder-top-and-bottom.tableGrid--threeColumnTable > .tableGrid__item:nth-last-child(-n+3) { border-bottom: 1px solid var(--border-colour-dynamic); }
+      .styledBorder-top-and-bottom.tableGrid--threeColumnTable > .tableGrid__item:nth-child(-n+4) { border-bottom: 1px solid var(--border-colour-dynamic); }
+
+      .styledBorder-outer.tableGrid--twoColumnTable > .tableGrid__item:nth-last-child(-n+2) { border-bottom: 1px solid var(--border-colour-dynamic); }
+      .styledBorder-outer.tableGrid--twoColumnTable > .tableGrid__item:nth-child(-n+3) { border-top: 1px solid var(--border-colour-dynamic); }
+      .styledBorder-outer.tableGrid--twoColumnTable > .tableGrid__item:nth-child(odd) { border-right: 1px solid var(--border-colour-dynamic); }
+      .styledBorder-outer.tableGrid--twoColumnTable > .tableGrid__item:nth-child(even) { border-left: 1px solid var(--border-colour-dynamic); }
+
+      .styledBorder-outer.tableGrid--threeColumnTable > .tableGrid__item:nth-last-child(-n+3) { border-bottom: 1px solid var(--border-colour-dynamic); }
+      .styledBorder-outer.tableGrid--threeColumnTable > .tableGrid__item:nth-child(-n+4) { border-top: 1px solid var(--border-colour-dynamic); }
+      .styledBorder-outer.tableGrid--threeColumnTable > .tableGrid__item:nth-child(3n+2) { border-left: 1px solid var(--border-colour-dynamic); }
+      .styledBorder-outer.tableGrid--threeColumnTable > .tableGrid__item:nth-child(3n+4) { border-right: 1px solid var(--border-colour-dynamic); }
+
+      .styledBorder-row.flexibleTable td { border-bottom: 1px solid var(--border-colour-dynamic); }
+
+      .styledBorder-column.flexibleTable td { border-left: 1px solid var(--border-colour-dynamic); }      
+      .styledBorder-column.flexibleTable tr td:first-child { border-left: none; }
+
+      .styledBorder-top-and-bottom.flexibleTable tr:first-child td,
+      .styledBorder-top-and-bottom.flexibleTable tr:last-child td { border-bottom: 1px solid var(--border-colour-dynamic); }
+
+      .styledBorder-outer.flexibleTable { border: 1px solid var(--border-colour-dynamic); border-top: unset; }  
+      .styledBorder-outer.styledBorder-row.flexibleTable,
+      .styledBorder-outer.styledBorder-top-and-bottom.flexibleTable { border-bottom: unset; }
+
+      .spacer { height: 0.5rem; }
+      p
+      .tableHeading__container { border-bottom: 1px solid var(--border-colour-dynamic);}
+
+      .tableHeading__container.styledBorder-outer { border: 1px solid var(--border-colour-dynamic); }
+
+      .tableHeading {
+        margin-bottom: 0.2rem;
+        max-height: 0.4rem;
+        padding: 0.07rem 0.12rem;
+        font-size: 0.206em;
+        line-height: 1em;
+        color: var(--black);
+      }
+
+      .tableHeading--alt { 
+        position: relative;
+        flex: 1;
+      }
+
+      .tableHeading__container.styledBorder-column .tableHeading + .tableHeading--alt { border-left: 1px solid var(--border-colour-dynamic); }
+
+      .u-mb-0 { margin-bottom: 0; }
+
+      .no-heading-1.no-heading-2 { display: none; }
+      /***** END Flexible Table Block Styling *****/
+
+      .statistic__inner.overflow:before,
+      .statistic__inner.overflow:after {
+        font-size: 0.2em;
+      }
+
+      [data-column-counter-hook="error-popup"] {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        padding: 20px;
+        background: #fff;
+        border: 2px solid red;
+        transform: translate(-50%, -50%);
+        z-index: 999;
+        font-size: 20px;
+        text-align: center;
+        font-weight: var(--bold);
+      }
+
+      .coverPageLayoutChoice--one-third-image .u-compact-heading { margin-bottom: 45px; }
+
+      /*-----------START DYNAMMIC COLUMN BREAKS-----------------*/
+      [data-original-content] {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        overflow: hidden;        
+        opacity: 0;
+        z-index: -9999;
+      }
+
+      [data-dynamic-content]{
+        display: flex;
+        margin-left: -20pt;
+      }
+
+      .column-dynamic {
+        flex: 1;
+        margin-left: 20pt;
+      }
+      /*-----------END DYNAMMIC COLUMN BREAKS-----------------*/
+
+      /*** START Error popup Styling **/
+      .dynamicColumnsPopup {
+        display: none;
+        padding: 25pt 15pt;
+        background: white;
+        color: red;
+        border: 3pt solid red;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        z-index: 1;       
+      }
+
+      .dynamicColumnsPopup__text {
+        font-size: 15pt;
+      }      
+      /*** END Error popup Styling **/
+
+
+      /*** Style for Inject Logic ***/
+      [data-idd-hook="source"] { display: none; }
+      /*** END Style for Inject Logic ***/
+
+      .gradient__container {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 5rem;
+      }
+      .coverPageLayoutChoice--one-third-image .gradient__container { display: block; }
+
+      .gradient {
+        position: absolute;           
+        right: 0;
+        top: 0; 
+        bottom: 0;     
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+      }
+
+      .gradientChoice--no-gradent .gradient {
+        display: none;
+      }
+
+      .gradientChoice--black-gradient .gradient {
+        background-image: url('https://files.outfit.io/media_library_items/256364/gradient-black-right-to-left.png');
+      }  
+      .gradientChoice--white-gradient .gradient {
+        background-image: url('https://files.outfit.io/media_library_items/256365/gradient-white-right-to-left.png');
+      }  
+
+      .divider {
+        height: 1px;
+        background-color: var(--black);
+      }      
+      
+      .js-customRichText-src {
+        overflow: hidden;
+        bottom: 0;
+      }
+
+
+      /* ANY OTHER STYLES THAT NEED MUSTACHE.JS CAPABILITIES */
+    </style>
+  </head>
+  <body style="background: white" 
+        data-crop="{{show-crop}}" 
+        data-reduce-export-font-size-by-percent="0" 
+        data-reduce-firefox-font-size-by-percent="0"
+        data-prevent-export-overflow="false"
+
+        class="primaryFacultyColour--{{UWA_primary-faculty-colour--cbn}}{{^UWA_primary-faculty-colour--cbn}}blue{{/UWA_primary-faculty-colour--cbn}}
+               secondaryFacultyColour--{{UWA_secondary-faculty-colour--cbn}}{{^UWA_secondary-faculty-colour--cbn}}none{{/UWA_secondary-faculty-colour--cbn}}">
+
+
+
+    <div data-idd-hook="source" data-idd-target-id="contact-details">
+      {{#spreadsheet.UWA_contact-details--cbn.length}}
+      <div class="contactDetails__container">
+        <div class="contactDetails__heading">get in touch<div class="contactDetails__decoration"></div>
+        </div>
+        <!--contactDetails__heading-->
+        {{#spreadsheet.UWA_contact-details--cbn}}
+        <div class="contactDetails__row">
+          {{#column-1}}
+          <div class="contactDetails"> 
+            <div class="contactDetails__text contactDetails__text--value" data-max-height="50">
+              <div class="js-customRichText-src">{{{column-1}}}</div>
+            </div>
+            <!--contactDetails__text-->
+          </div>
+          <!--contactDetails-->
+          {{/column-1}}
+          {{#column-2}}
+          <div class="contactDetails">         
+            <div class="contactDetails__text contactDetails__text--value" data-max-height="50">
+              <div class="js-customRichText-src">{{{column-2}}}</div>
+            </div>
+            <!--contactDetails__text-->
+          </div>
+          <!--contactDetails-->
+          {{/column-2}}
+          {{#column-3}}
+          <div class="contactDetails">           
+            <div class="contactDetails__text contactDetails__text--value" data-max-height="50">
+              <div class="js-customRichText-src">{{{column-3}}}</div>
+            </div>
+            <!--contactDetails__text-->
+          </div>
+          <!--contactDetails-->
+          {{/column-3}}
+          {{#column-4}}
+          <div class="contactDetails">          
+            <div class="contactDetails__text contactDetails__text--value" data-max-height="50">
+              <div class="js-customRichText-src">{{{column-4}}}</div>
+            </div>
+            <!--contactDetails__text-->
+          </div>
+          <!--contactDetails-->
+          {{/column-4}}
+          {{#column-5}}
+          <div class="contactDetails">         
+            <div class="contactDetails__text contactDetails__text--value" data-max-height="50">
+              <div class="js-customRichText-src">{{{column-5}}}</div>
+            </div>
+            <!--contactDetails__text-->
+          </div>
+          <!--contactDetails-->
+          {{/column-5}}
+        </div>
+        <!--contactDetails__row-->
+        {{/spreadsheet.UWA_contact-details--cbn}}
+      </div>
+      <!--contactDetails__container-->
+      {{/spreadsheet.UWA_contact-details--cbn.length}}
+    </div>
+
+    {{#collection.UWA_cover-page--cbn}}
+    {{#block.UWA_cover-page--cbn}}
+    <div class="page               
+                coverPageLayoutChoice--{{UWA_layouts--cbn1}}{{^UWA_layouts--cbn1}}half-image{{/UWA_layouts--cbn1}}
+                {{UWA_heading-font--cbn1}}
+                statistic--{{{UWA_statistic-width--cbn1}}}{{^UWA_statistic-width--cbn1}}fixed{{/UWA_statistic-width--cbn1}}
+                statisticAlignment--{{{UWA_statistic-block-alignment--cbn1}}}{{^UWA_statistic-block-alignment--cbn1}}center{{/UWA_statistic-block-alignment--cbn1}}
+                statisticPosition--{{{UWA_statistic-block-position--cbn1}}}{{^UWA_statistic-block-position--cbn1}}right{{/UWA_statistic-block-position--cbn1}}
+                statisticWidthOneThird--{{UWA_statistics-width-one-third-image-layout--cbn1}}{{^UWA_statistics-width-one-third-image-layout--cbn1}}normal{{/UWA_statistics-width-one-third-image-layout--cbn1}}
+                showInternationalDetails--{{{UWA_footer-contact-details--cbn1}}}{{^UWA_footer-contact-details--cbn1}}hide{{/UWA_footer-contact-details--cbn1}}
+                gradientChoice--{{{UWA_gradient--cbn1}}}{{^UWA_gradient--cbn1}}no-gradient{{/UWA_gradient--cbn1}}"
+         data-column-counter-hook="page"
+         data-column-counter-layout="{{UWA_layouts--cbn1}}{{^UWA_layouts--cbn1}}half-image{{/UWA_layouts--cbn1}}">
+
+      <div class="bleed">
+
+        <div class="container fit fit--cover">
+
+          <div data-column-counter-hook="error-popup">Please use One Third Image or Half Image layout in order to be able to add more than one column.</div>
+          <div class="header">
+            <div class="hero">
+
+              <div class="abstract__container">
+                <div class="abstract"><div class="reposition-fix">{{{UWA_abstract-blue-image--cbn1}}}</div></div><!--abstract-->
+                <div class="backgroundColor"></div>
+              </div><!--abstract__container-->
+              {{#UWA_feature-image--cbn1}}<div class="reposition-fix">{{{UWA_feature-image--cbn1}}}</div><!--reposition-fix-->{{/UWA_feature-image--cbn1}}
+
+              <div class="logo__container">
+                <img src="{{{account.logos.formal-primary}}}" class="logo"><!--logo-->
+              </div><!--logo__container-->
+            </div><!--hero-->
+            <div class="gradient__container">              
+              <div class="gradient" 
+                   style="width: {{{UWA_gradient-width--cbn1}}}{{^UWA_gradient-width--cbn1}}100{{/UWA_gradient-width--cbn1}}%;
+                          opacity: calc(100% / 100 * {{{UWA_gradient-opacity--cbn1}}}{{^UWA_gradient-opacity--cbn1}}100{{/UWA_gradient-opacity--cbn1}}"></div><!--gradient--topToBotWhite-->
+            </div><!--gradient__container-->
+            <div class="heading
+                        u-heading-patch
+                        heading1FontWeight--{{heading-1-font-weight1}}{{^heading-1-font-weight1}}regular{{/heading-1-font-weight1}}
+                        heading2FontWeight--{{heading-2-font-weight1}}{{^heading-2-font-weight1}}regular{{/heading-2-font-weight1}}
+                        heading3FontWeight--{{heading-3-font-weight1}}{{^heading-3-font-weight1}}regular{{/heading-3-font-weight1}}"  
+                 data-max-height="css"
+                 data-heading-height-check-hook="heading">
+              {{{UWA_heading--cbn1}}}
+            </div><!--heading-->           
+            {{#collection.UWA_statistics--cbn.length}}
+            <div class="statistic__container statistic__container--header" data-max-height="css">
+              {{#collection.UWA_statistics--cbn}}
+              {{#block.UWA_statistic--cbn}}
+              <div class="statistic">
+                <div class="statistic__inner" data-max-height="dynamic">
+                  <div class="statistic__text">{{{UWA_statistic-copy--cbn}}}</div><!--statistic__text-->
+                </div><!--statistic__inner-->
+              </div><!--statistic-->
+              {{/block.UWA_statistic--cbn}}
+              {{/collection.UWA_statistics--cbn}}
+            </div><!--statistic__container-->
+            {{/collection.UWA_statistics--cbn.length}}            
+          </div><!--header-->
+          <div class="body">
+            {{#collection.UWA_statistics--cbn.length}}
+            <div class="statistic__container statistic__container--body">
+              {{#collection.UWA_statistics--cbn}}
+              {{#block.UWA_statistic--cbn}}
+              <div class="statistic">
+                <div class="statistic__inner" data-max-height="dynamic">
+                  <div class="statistic__text">{{{UWA_statistic-copy--cbn}}}</div><!--statistic__text-->
+                </div><!--statistic__inner-->
+              </div><!--statistic-->
+              {{/block.UWA_statistic--cbn}}
+              {{/collection.UWA_statistics--cbn}}
+            </div><!--statistic__container-->
+            {{/collection.UWA_statistics--cbn.length}} 
+            <div class="column__container bodyContentAlignment--{{UWA_body-content-alignment--cbn1}}{{^UWA_body-content-alignment--cbn1}}bottom{{/UWA_body-content-alignment--cbn1}}">
+              {{#collection.UWA_columns--cbn}}
+              {{#block.UWA_column--cbn}}
+              <div class="column" data-max-height="dynamic" data-column-counter-hook="column">
+                {{#collection.UWA_flexible-content--cbn}}
+
+                {{#block.UWA_quote--cbn}}
+                <!--{{UWA_image--cbn}}
+    {{{UWA_quote-heading--cbn}}}
+          {{{UWA_quote-copy--cbn}}}
+          {{UWA_quote-font-weight--cbn}}
+          {{{UWA_quote-author--cbn}}}
+          {{UWA_author-letter-spacing--cbn}}
+          -->
+                <div class="quote__container 
+                            quoteFontWeight--{{UWA_quote-font-weight--cbn}}{{^UWA_quote-font-weight--cbn}}regular{{/UWA_quote-font-weight--cbn}}"
+                     data-column-counter-hook="content-block">
+                  {{#UWA_image--cbn}}
+                  <div class="quote__image">
+                    <div class="reposition-fix">{{{UWA_image--cbn}}}</div>
+                  </div><!--quote__image-->
+                  {{/UWA_image--cbn}}
+                  {{#UWA_image--cbn}}
+                  <div class="quote__divider"></div><!--quote__divider-->
+                  {{/UWA_image--cbn}}
+                  <div class="quote" data-max-height="css">
+                    {{#UWA_quote-heading--cbn}}
+                    <div class="quote__heading u-heading-patch" data-max-line="2">{{{UWA_quote-heading--cbn}}}</div><!--quote__heading-->
+                    {{/UWA_quote-heading--cbn}}
+                    {{#UWA_quote-copy--cbn}}
+                    <div class="quote__copy">{{{UWA_quote-copy--cbn}}}</div><!--quote__copy-->
+                    {{/UWA_quote-copy--cbn}}
+                    {{#UWA_quote-author--cbn}}
+                    <div class="quote__author" style="letter-spacing: {{{UWA_author-letter-spacing--cbn}}}pt" data-max-height="css">{{{UWA_quote-author--cbn}}}</div><!--quote__author-->
+                    {{/UWA_quote-author--cbn}}
+                  </div><!--quote-->
+                </div><!--quote__container-->
+                {{/block.UWA_quote--cbn}}
+
+                {{#block.UWA_text--cbn}}
+                <div class="text" data-column-counter-hook="content-block">{{{UWA_text--cbn}}}</div><!--text-->
+                {{/block.UWA_text--cbn}}
+
+                {{#block.UWA_partner-logos--cbn}}
+                <div class="partnerLogo__container" style="position:relative;"
+                     data-partner-logo-vertical-alignment="{{UWA_logo-vertical-alignment--cbn}}{{^UWA_logo-vertical-alignment--cbn}}bottom{{/UWA_logo-vertical-alignment--cbn}}"
+                     data-partner-logo-horizontal-alignment="{{UWA_logo-horizontal-alignment--cbn}}{{^UWA_logo-horizontal-alignment--cbn}}left{{/UWA_logo-horizontal-alignment--cbn}}"
+                     data-column-counter-hook="content-block"
+                     data-plc-hook="container">
+                  {{#UWA_logo-1--cbn}}<img src="{{{UWA_logo-1--cbn}}}" class="partnerLogo" data-plc-hook="logo"><!--partnerLogo-->{{/UWA_logo-1--cbn}}
+                  {{#UWA_logo-2--cbn}}<img src="{{{UWA_logo-2--cbn}}}" class="partnerLogo" data-plc-hook="logo"><!--partnerLogo-->{{/UWA_logo-2--cbn}}
+                  {{#UWA_logo-3--cbn}}<img src="{{{UWA_logo-3--cbn}}}" class="partnerLogo" data-plc-hook="logo"><!--partnerLogo-->{{/UWA_logo-3--cbn}}
+                  {{#UWA_logo-4--cbn}}<img src="{{{UWA_logo-4--cbn}}}" class="partnerLogo" data-plc-hook="logo"><!--partnerLogo-->{{/UWA_logo-4--cbn}}
+                </div><!--partnerLogo__container-->
+                {{/block.UWA_partner-logos--cbn}}
+
+                {{#block.UWA_course-data-table--cbn}}
+                <div 
+                     class="dataTable"
+                     data-column-counter-hook="content-block"
+                     data-dtc-hook="table">
+                  {{#spreadsheet.UWA_course-data-table--cbn}}
+                  <!--order inputs
+      {{{first-column}}}
+      {{UWA_first-column-width--cbn}}
+      {{{second-column}}}
+      -->
+                  <div class="dataTable__row">
+                    <div 
+                         class="dataTable__cell dataTable__cell--firstCell" 
+                         style="width: {{#UWA_first-column-width--cbn}}{{UWA_first-column-width--cbn}}%{{/UWA_first-column-width--cbn}}{{^UWA_first-column-width--cbn}}auto{{/UWA_first-column-width--cbn}}"
+                         data-dtc-hook="left-cell"
+                         data-dtc-width-set="{{#UWA_first-column-width--cbn}}true{{/UWA_first-column-width--cbn}}{{^UWA_first-column-width--cbn}}false{{/UWA_first-column-width--cbn}}"
+                         >
+                      <div class="js-customRichText-src">{{{first-column}}}</div>
+                    </div><!--dataTable__cell-->
+                    <div class="dataTable__cell"><div class="js-customRichText-src">{{{second-column}}}</div></div><!--dataTable__cell-->
+                  </div><!--dataTable__row-->
+                  {{/spreadsheet.UWA_course-data-table--cbn}}
+                  <!--{{UWA_first-column-width--cbn}} *** don't delete this comment *** -->
+                </div><!--dataTable-->
+                {{/block.UWA_course-data-table--cbn}}  
+
+                {{#block.UWA_call-to-action--cbn}}
+                <div class="callout" data-column-counter-hook="content-block">
+                  <div class="callout__text" data-max-line="5">{{{UWA_call-to-action--cbn}}}</div><!--callout__text-->
+                </div><!--callout-->
+                {{/block.UWA_call-to-action--cbn}}
+
+                {{#block.UWA_break-out--cbn}}
+                <div class="breakOut" data-column-counter-hook="content-block">
+                  <div class="breakOut__text">{{{UWA_break-out-text--cbn}}}</div><!--callout__text-->
+                </div><!--callout-->
+                {{/block.UWA_break-out--cbn}}
+
+                {{#block.flexible-column-table}}
+                <div data-js-hook-set-table-heading="outer" data-column-counter-hook="content-block">
+                  <div data-js-hook-set-table-heading="wrapper"
+                       data-border-styles="{{table-border-style}}"
+                       style="display: flex;" 
+                       class="tableHeading__container 
+                              tableBorderColour--{{table-border-colour}}{{^table-border-colour}}none{{/table-border-colour}} 
+                              {{^table-heading}}no-heading-1{{/table-heading}}
+                              {{^table-heading-2}}no-heading-2{{/table-heading-2}}
+                              tableHeading1FontWeight--{{UWA_table-heading-1-font-weight--cbn}}{{^UWA_table-heading-1-font-weight--cbn}}medium{{/UWA_table-heading-1-font-weight--cbn}}
+                              tableHeading2FontWeight--{{UWA_table-heading-2-font-weight--cbn}}{{^UWA_table-heading-2-font-weight--cbn}}medium{{/UWA_table-heading-2-font-weight--cbn}}">
+                    {{#table-heading}}
+                    <div 
+                         class="tableHeading tableHeading--primary u-mb-0" 
+                         data-js-hook-set-table-heading="heading"
+                         style="width: {{#table-heading-width}}{{table-heading-width}}%{{/table-heading-width}}{{^table-heading-width}}auto{{/table-heading-width}};"
+                         data-max-height="css">{{{table-heading}}}</div><!-- heading -->
+                    {{/table-heading}}
+                    {{#table-heading-2}}
+                    <div 
+                         class="tableHeading tableHeading--secondary tableHeading--alt u-mb-0" 
+                         data-max-height="css">{{{table-heading-2}}}</div><!-- heading -->                      
+                    {{/table-heading-2}}
+                  </div><!-- end wrapper-->
+                  <table class="flexibleTable 
+                                tableBorderColour--{{table-border-colour}}{{^table-border-colour}}none{{/table-border-colour}}
+                                columnBackgroundColour--{{column-background-colour}}{{^column-background-colour}}none{{/column-background-colour}} 
+                                tableColourTheme--{{table-colour-theme}}{{^table-colour-theme}}rows{{/table-colour-theme}} 
+                                js-emptyColumnsCheck-table"
+                         data-border-styles="{{table-border-style}}"
+                         data-js-hook-set-table-heading="table"     
+                         data-input-order="{{#spreadsheet.flexible-column-table-heading--cbn}}{{/spreadsheet.flexible-column-table-heading--cbn}}
+                                           {{#spreadsheet.flexible-column-table-data}}{{/spreadsheet.flexible-column-table-data}}"
+                         data-flexi-column-sizes="[{{column-1-size}}{{^column-1-size}}0{{/column-1-size}}, {{column-2-size}}{{^column-2-size}}0{{/column-2-size}}, {{column-3-size}}{{^column-3-size}}0{{/column-3-size}}, {{column-4-size}}{{^column-4-size}}0{{/column-4-size}}, {{column-5-size}}{{^column-5-size}}0{{/column-5-size}}, {{column-6-size}}{{^column-6-size}}0{{/column-6-size}}]"
+                         >
+                    {{#spreadsheet.flexible-column-table-heading--cbn}}
+                    <tr class="flexibleTable__row flexibleTable__row--header">
+                      <td 
+                          class="flexibleTable__item flexibleTable__item--heading {{^column-1-heading}}empty-col-1{{/column-1-heading}}"
+                          data-visible-column="{{#column-1-heading}}true{{/column-1-heading}}">
+                        <div class="js-customRichText-src">{{{column-1-heading}}}</div>
+                      </td><!-- tableGrid__item--heading -->
+                      <td 
+                          class="flexibleTable__item flexibleTable__item--heading {{^column-2-heading}}empty-col-2{{/column-2-heading}}"
+                          data-visible-column="{{#column-2-heading}}true{{/column-2-heading}}">
+                        <div class="js-customRichText-src">{{{column-2-heading}}}</div>
+                      </td><!-- tableGrid__item--heading -->
+                      <td 
+                          class="flexibleTable__item flexibleTable__item--heading {{^column-3-heading}}empty-col-3{{/column-3-heading}}"
+                          data-visible-column="{{#column-3-heading}}true{{/column-3-heading}}">
+                        <div class="js-customRichText-src">{{{column-3-heading}}}</div>
+                      </td><!-- tableGrid__item--heading -->
+                      <td 
+                          class="flexibleTable__item flexibleTable__item--heading {{^column-4-heading}}empty-col-4{{/column-4-heading}}"
+                          data-visible-column="{{#column-4-heading}}true{{/column-4-heading}}">
+                        <div class="js-customRichText-src">{{{column-4-heading}}}</div>
+                      </td><!-- tableGrid__item--heading -->
+                      <td 
+                          class="flexibleTable__item flexibleTable__item--heading {{^column-5-heading}}empty-col-5{{/column-5-heading}}"
+                          data-visible-column="{{#column-5-heading}}true{{/column-5-heading}}">
+                        <div class="js-customRichText-src">{{{column-5-heading}}}</div>
+                      </td><!-- tableGrid__item--heading -->
+                    </tr>
+                    {{/spreadsheet.flexible-column-table-heading--cbn}}
+                    {{#spreadsheet.flexible-column-table-data}}
+                    <tr class="flexibleTable__row flexibleTable__row--data">
+                      <td class="flexibleTable__item flexibleTable__item--data {{^column-1}}empty-col-1{{/column-1}}">
+                        <div class="js-customRichText-src">{{{column-1}}}</div>
+                      </td><!-- tableGrid__item -->
+                      <td class="flexibleTable__item flexibleTable__item--data {{^column-2}}empty-col-2{{/column-2}}">
+                        <div class="js-customRichText-src">{{{column-2}}}</div>
+                      </td><!-- tableGrid__item -->
+                      <td class="flexibleTable__item flexibleTable__item--data {{^column-3}}empty-col-3{{/column-3}}">
+                        <div class="js-customRichText-src">{{{column-3}}}</div>
+                      </td><!-- tableGrid__item -->
+                      <td class="flexibleTable__item flexibleTable__item--data {{^column-4}}empty-col-4{{/column-4}}">
+                        <div class="js-customRichText-src">{{{column-4}}}</div>
+                      </td><!-- tableGrid__item -->
+                      <td class="flexibleTable__item flexibleTable__item--data {{^column-5}}empty-col-5{{/column-5}}">
+                        <div class="js-customRichText-src">{{{column-5}}}</div>
+                      </td><!-- tableGrid__item -->           
+                    </tr>
+                    {{/spreadsheet.flexible-column-table-data}}
+                  </table><!-- grid__container -->
+                </div><!-- end data-js-hook-set-table-heading="outer" -->
+                {{/block.flexible-column-table}}
+
+                {{#block.UWA_divider--cbn}}
+                <div class="divider"style="transform: translateY(-{{{UWA_divider--cbn}}}{{^UWA_divider--cbn}}8{{/UWA_divider--cbn}}pt)"></div><!--divider-->
+                {{/block.UWA_divider--cbn}}
+
+                {{/collection.UWA_flexible-content--cbn}}
+              </div><!--column-->
+              {{/block.UWA_column--cbn}}
+              {{/collection.UWA_columns--cbn}}
+            </div><!--column__container-->
+
+          </div><!--body-->
+
+          {{#UWA_website--cbn1}}
+          <div class="footer footer--onlyWebsite">
+            <div class="website" data-max-line="1">{{{UWA_website--cbn1}}}</div><!--website-->
+          </div><!--footer__primary-->
+          {{/UWA_website--cbn1}}
+
+          <div class="footer footer--contactDetailsAndLogo footer--getInTouchDetails">
+            <div class="contactDetails__containerWrapper" data-idd-target="contact-details"></div><!--contactDetails__containerWrapper-->
+            <!-- CONTACT DETAILS WILL BE INJECTED HERE -->
+            <img src="{{{account.logos.formal-primary}}}" class="logo logo--footer"><!--logo-->
+          </div><!--footer--getInTouchDetails-->
+
+          <div class="footer footer--contactDetailsAndLogo footer--internationalDetails">
+            <div class="contactDetails__containerWrapper">
+
+              <div class="contactDetails__container contactDetails__container--domestic">
+
+                <div class="contactDetails__containerItem">
+                  <div class="contactDetails__heading">DOMESTIC<div class="contactDetails__decoration"></div></div><!--contactDetails__heading-->
+
+                  <div class="contactDetails__row">
+
+                    <div class="contactDetails">
+                      <div class="contactDetails__text contactDetails__text--label">CALL US</div><!--contactDetails__text-->
+                      <div class="contactDetails__text contactDetails__text--value">131 UWA (131 892)</div><!--contactDetails__text-->
+                    </div><!--contactDetails-->
+
+                    <div class="contactDetails">
+                      <div class="contactDetails__text contactDetails__text--label">CHAT ONLINE</div><!--contactDetails__text-->
+                      <div class="contactDetails__text contactDetails__text--value">uwa.edu.au/study<br>Mon–Fri 2.30–4.30pm (AWST)</div><!--contactDetails__text-->
+                    </div><!--contactDetails-->    
+
+                    <div class="contactDetails">
+                      <div class="contactDetails__text contactDetails__text--label">FAQs</div><!--contactDetails__text-->
+                      <div class="contactDetails__text contactDetails__text--value">ask.uwa.edu.au</div><!--contactDetails__text-->
+                    </div><!--contactDetails-->
+
+                    <div class="contactDetails">
+                      <div class="contactDetails__text contactDetails__text--label">EMAIL US</div><!--contactDetails__text-->
+                      <div class="contactDetails__text contactDetails__text--value">future-students<br>@uwa.edu.au</div><!--contactDetails__text-->
+                    </div><!--contactDetails-->
+
+                    <div class="contactDetails">
+                      <div class="contactDetails__text contactDetails__text--label">VISIT US</div><!--contactDetails__text-->
+                      <div class="contactDetails__text contactDetails__text--value">Student Central,<br>Perth campus</div><!--contactDetails__text-->
+                    </div><!--contactDetails-->
+
+                  </div><!--contactDetails__row-->
+
+                </div><!--contactDetails__containerItem-->
+
+              </div><!--contactDetails__container-->
+
+              <div class="contactDetails__container contactDetails__container--international">
+
+                <div class="contactDetails__containerItem">
+                  <div class="contactDetails__heading">INTERNATIONAL<div class="contactDetails__decoration"></div></div><!--contactDetails__heading-->
+
+                  <div class="contactDetails__row">
+
+                    <div class="contactDetails">
+                      <div class="contactDetails__text contactDetails__text--label">CALL US</div><!--contactDetails__text-->
+                      <div class="contactDetails__text contactDetails__text--value">+61 6488 1000<br>Monday–Friday<br>8.30am–5.00pm (AWST)</div><!--contactDetails__text-->
+                    </div><!--contactDetails-->
+
+                    <div class="contactDetails">
+                      <div class="contactDetails__text contactDetails__text--label">CHAT ONLINE</div><!--contactDetails__text-->
+                      <div class="contactDetails__text contactDetails__text--value">uwa.edu.au/study<br>Monday–Friday<br>2.30–4.30pm (AWST)</div><!--contactDetails__text-->
+                    </div><!--contactDetails-->    
+
+                    <div class="contactDetails">
+                      <div class="contactDetails__text contactDetails__text--label">EMAIL US</div><!--contactDetails__text-->
+                      <div class="contactDetails__text contactDetails__text--value">international<br>@uwa.edu.au</div><!--contactDetails__text-->
+                    </div><!--contactDetails-->
+
+                    <div class="contactDetails">
+                      <div class="contactDetails__text contactDetails__text--label">ASK A QUESTION</div><!--contactDetails__text-->
+                      <div class="contactDetails__text contactDetails__text--value">appointments.applications.uwa.edu.au</div><!--contactDetails__text-->
+                    </div><!--contactDetails-->          
+
+                  </div><!--contactDetails__row-->
+
+                </div><!--contactDetails__containerItem-->
+
+              </div><!--contactDetails__container-->
+
+            </div><!--contactDetails__containerWrapper-->
+
+            <img src="{{{account.logos.formal-primary}}}" class="logo logo--footer"><!--logo-->
+          </div><!--footer--internationalDetails-->
+
+          <div class="cricos__container" data-dlc-hook="container">
+            <div class="exportId">{{#metadata}}OF: {{export_id}}{{/metadata}}{{^metadata}}OF: 123456789{{/metadata}}</div><!--exportId-->
+            <div class="cricos">{{{account.snippets.cricos}}}</div><!--cricos-->          
+          </div><!--cricos__container-->
+
+        </div><!--container fit--cover-->
+
+      </div><!--bleed-->
+
+    </div><!--page-->
+    {{/block.UWA_cover-page--cbn}}
+    {{/collection.UWA_cover-page--cbn}}
+
+
+
+    {{#collection.UWA_back-page--cbn}}
+    {{#block.UWA_back-page--cbn}}
+    <!--ORDER INPUTS
+   {{{UWA_show-top--color-bar--cbn}}}
+  {{{UWA_heading--cbn}}}
+    {{#collection.UWA_page-content--cbn}}{{/collection.UWA_page-content--cbn}}
+   {{{UWA_footer-contact-details--cbn}}}
+-->
+    <div class="page page--backPage
+                showTopBar--{{{UWA_show-top--color-bar--cbn}}}{{^UWA_show-top--color-bar--cbn}}show{{/UWA_show-top--color-bar--cbn}}
+                showInternationalDetails--{{{UWA_footer-contact-details--cbn}}}{{^UWA_footer-contact-details--cbn}}hide{{/UWA_footer-contact-details--cbn}}">
+
+      <div class="bleed">
+
+        <div class="container fit fit--backPage">
+
+          <div class="topBar"></div><!--topBar-->
+
+          <div class="body body--backPage">
+            <div class="headingBack">{{{UWA_heading--cbn}}}</div><!--headingBack-->
+
+            <div class="column__container column__container--backPage">      
+              <div class="column__containerInner"  data-max-height="dynamic">                
+                {{#collection.UWA_page-content--cbn}}
+                {{#block.UWA_content-section--cbn}}
+
+                <div class="column column--backPage" data-dynamic-collection-columns>
+                  <div class="dynamicColumnsPopup"><div class="dynamicColumnsPopup__text"></div></div>
+                  <div data-dynamic-content></div><!--data-dynamic-content-->
+                  <div data-original-content> 
+                    {{#collection.UWA_content--cbn}}
+
+                    {{#block.UWA_course-data-table--cbn}}
+                    <div class="dataTable" data-column-item data-dtc-hook="table">                  
+                      {{#spreadsheet.UWA_course-data-table--cbn}}
+                      <!--order inputs
+      {{{first-column}}}
+      {{UWA_first-column-width--cbn}}
+      {{{second-column}}}
+      -->
+                      <div class="dataTable__row">
+                        <div class="dataTable__cell dataTable__cell--firstCell" style="width: {{UWA_first-column-width--cbn}}%" data-dtc-hook="left-cell">
+                          <div class="js-customRichText-src">{{{first-column}}}</div>
+                        </div><!--dataTable__cell-->
+                        <div class="dataTable__cell"><div class="js-customRichText-src">{{{second-column}}}</div></div><!--dataTable__cell-->
+                      </div><!--dataTable__row-->
+                      {{/spreadsheet.UWA_course-data-table--cbn}}
+                      <!--{{UWA_first-column-width--cbn}} *** don't delete this comment *** -->
+                    </div><!--dataTable-->
+                    {{/block.UWA_course-data-table--cbn}}
+
+                    {{#block.UWA_text--cbn}}
+                    <div class="text" data-column-item>{{{UWA_text--cbn}}}</div><!--text-->
+                    {{/block.UWA_text--cbn}}
+
+                    {{#block.UWA_call-to-action--cbn}}
+                    <div class="callout" data-column-item>
+                      <div class="callout__text" data-max-line="5">{{{UWA_call-to-action--cbn}}}</div><!--callout__text-->
+                    </div><!--callout-->
+                    {{/block.UWA_call-to-action--cbn}}
+
+                    {{#block.UWA_image--cbn}}
+                    <div class="image" style="height: {{UWA_image-height--cbn}}{{^UWA_image-height--cbn}}100{{/UWA_image-height--cbn}}px" data-column-item>
+                      <div class="reposition-fix">{{{UWA_image--cbn}}}</div><!--reposition-fix-->
+                    </div><!--image-->
+                    {{/block.UWA_image--cbn}}
+
+                    {{#block.UWA_partner-logos--cbn}}
+                    <div class="partnerLogo__container" 
+                         data-partner-logo-vertical-alignment="{{UWA_logo-vertical-alignment--cbn}}{{^UWA_logo-vertical-alignment--cbn}}bottom{{/UWA_logo-vertical-alignment--cbn}}"
+                         data-partner-logo-horizontal-alignment="{{UWA_logo-horizontal-alignment--cbn}}{{^UWA_logo-horizontal-alignment--cbn}}left{{/UWA_logo-horizontal-alignment--cbn}}"
+                         data-column-item 
+                         data-plc-hook="container">
+                      {{#UWA_logo-1--cbn}}<img src="{{{UWA_logo-1--cbn}}}" class="partnerLogo" data-plc-hook="logo"><!--partnerLogo-->{{/UWA_logo-1--cbn}}
+                      {{#UWA_logo-2--cbn}}<img src="{{{UWA_logo-2--cbn}}}" class="partnerLogo" data-plc-hook="logo"><!--partnerLogo-->{{/UWA_logo-2--cbn}}
+                      {{#UWA_logo-3--cbn}}<img src="{{{UWA_logo-3--cbn}}}" class="partnerLogo" data-plc-hook="logo"><!--partnerLogo-->{{/UWA_logo-3--cbn}}
+                      {{#UWA_logo-4--cbn}}<img src="{{{UWA_logo-4--cbn}}}" class="partnerLogo" data-plc-hook="logo"><!--partnerLogo-->{{/UWA_logo-4--cbn}}
+                    </div><!--partnerLogo__container-->
+                    {{/block.UWA_partner-logos--cbn}}
+
+                    {{#block.UWA_quote--cbn}}
+                    <!--{{UWA_image--cbn}}
+    {{{UWA_quote-heading--cbn}}}
+          {{{UWA_quote-copy--cbn}}}
+          {{UWA_quote-font-weight--cbn}}
+          {{{UWA_quote-author--cbn}}}
+          {{UWA_author-letter-spacing--cbn}}
+          -->
+                    <div class="quote__container 
+                                quoteFontWeight--{{UWA_quote-font-weight--cbn}}{{^UWA_quote-font-weight--cbn}}regular{{/UWA_quote-font-weight--cbn}}"
+                         data-column-item>
+                      {{#UWA_image--cbn}}
+                      <div class="quote__image">
+                        <div class="reposition-fix">{{{UWA_image--cbn}}}</div>
+                      </div><!--quote__image-->
+                      {{/UWA_image--cbn}}
+                      {{#UWA_image--cbn}}
+                      <div class="quote__divider quote__divider--backPage"></div><!--quote__divider-->
+                      {{/UWA_image--cbn}}
+                      <div class="quote" data-max-height="css">
+                        {{#UWA_quote-heading--cbn}}
+                        <div class="quote__heading u-heading-patch" data-max-line="2">{{{UWA_quote-heading--cbn}}}</div><!--quote__heading-->
+                        {{/UWA_quote-heading--cbn}}
+                        {{#UWA_quote-copy--cbn}}
+                        <div class="quote__copy">{{{UWA_quote-copy--cbn}}}</div><!--quote__copy-->
+                        {{/UWA_quote-copy--cbn}}
+                        {{#UWA_quote-author--cbn}}
+                        <div class="quote__author" style="letter-spacing: {{{UWA_author-letter-spacing--cbn}}}pt" data-max-height="css">{{{UWA_quote-author--cbn}}}</div><!--quote__author-->
+                        {{/UWA_quote-author--cbn}}
+                      </div><!--quote-->
+                    </div><!--quote__container-->
+                    {{/block.UWA_quote--cbn}}
+
+                    {{#block.UWA_study-plan-table--cbn}}
+                    <div class="planTable__container" data-ptc-hook="table-container" data-column-item>
+                      <div class="planTable__heading">Sample study plan</div><!--planTable__heading-->
+                      <div class="planTable__text">Bachelor of Science with degree-specific major in Environmental Science and second major in Agricultural Science</div><!--planTable__heading-->
+
+                      <div class="planTable" data-ptc-hook="table">
+                        {{#collection.UWA_year-section--cbn}}
+                        {{#block.UWA_study-plan-year--cbn}}
+                        <div 
+                             class="planTable__year" 
+                             data-ptc-hook="table-year" 
+                             data-ptc-period-type="{{UWA_semester-or-trimester--cbn}}{{^UWA_semester-or-trimester--cbn}}sem{{/UWA_semester-or-trimester--cbn}}">
+                          <div class="yearIndex" data-ptc-hook="year-index">YR1</div><!--year-->
+                          <div class="subject__container">
+                            {{#spreadsheet.UWA_study-plan--cbn}}    
+                            <div class="subject__row">
+                              <div class="period" data-ptc-hook="period">sem 1</div><!--period-->
+                              <div class="subject__rowInner">
+                                <div class="subject" data-ptc-color="{{subject-1-colour}}{{^subject-1-colour}}orange{{/subject-1-colour}}">
+                                  <div class="subject__text" data-max-line="3">{{{subject-1}}}</div><!--subject__text-->
+                                </div><!--subject-->
+                                <div class="subject" data-ptc-color="{{subject-2-colour}}{{^subject-2-colour}}orange{{/subject-2-colour}}">
+                                  <div class="subject__text" data-max-line="3">{{{subject-2}}}</div><!--subject__text-->
+                                </div><!--subject-->
+                                <div class="subject" data-ptc-color="{{subject-3-colour}}{{^subject-3-colour}}orange{{/subject-3-colour}}">
+                                  <div class="subject__text" data-max-line="3">{{{subject-3}}}</div><!--subject__text-->
+                                </div><!--subject-->
+                                <div class="subject" data-ptc-color="{{subject-4-colour}}{{^subject-4-colour}}orange{{/subject-4-colour}}">
+                                  <div class="subject__text" data-max-line="3">{{{subject-4}}}</div><!--subject__text-->
+                                </div><!--subject-->
+                              </div><!--subject__rowInner-->
+                            </div><!--subject__row-->
+                            {{/spreadsheet.UWA_study-plan--cbn}} 
+                          </div><!--subject__container-->
+                        </div><!--planTable__year--> 
+                        {{/block.UWA_study-plan-year--cbn}}
+                        {{/collection.UWA_year-section--cbn}}
+                      </div><!--planTable-->
+                      <div class="key__container" data-ptc-hook="key-container">
+                        <div class="key__label">Key</div><!--key__label-->
+                        {{#spreadsheet.UWA_key--cbn}}
+                        {{#orange-key}}
+                        <div class="key" data-ptc-key-color="orange" data-ptc-key-color-abbr="o">
+                          <div class="key__color key__color--orange"></div><!--key__color-->
+                          <div class="key__text">{{orange-key}}</div><!--key__text-->
+                        </div><!--key-->
+                        {{/orange-key}}
+                        {{#green-key}}
+                        <div class="key" data-ptc-key-color="green" data-ptc-key-color-abbr="g">
+                          <div class="key__color key__color--green"></div><!--key__color-->
+                          <div class="key__text">{{green-key}}</div><!--key__text-->
+                        </div><!--key-->
+                        {{/green-key}}
+                        {{#light-blue-key}}
+                        <div class="key" data-ptc-key-color="light blue" data-ptc-key-color-abbr="lb">
+                          <div class="key__color key__color--lightBlue"></div><!--key__color-->
+                          <div class="key__text">{{light-blue-key}}</div><!--key__text-->
+                        </div><!--key-->
+                        {{/light-blue-key}}
+                        {{#purple-key}}
+                        <div class="key" data-ptc-key-color="purple" data-ptc-key-color-abbr="p">
+                          <div class="key__color key__color--purple"></div><!--key__color-->
+                          <div class="key__text">{{purple-key}}</div><!--key__text-->
+                        </div><!--key-->
+                        {{/purple-key}}
+                        {{#blue-key}}
+                        <div class="key" data-ptc-key-color="blue" data-ptc-key-color-abbr="b">
+                          <div class="key__color key__color--blue"></div><!--key__color-->
+                          <div class="key__text">{{blue-key}}</div><!--key__text-->
+                        </div><!--key-->
+                        {{/blue-key}}
+                        {{#yellow-key}}
+                        <div class="key" data-ptc-key-color="yellow" data-ptc-key-color-abbr="y">
+                          <div class="key__color key__color--yellow"></div><!--key__color-->
+                          <div class="key__text">{{yellow-key}}</div><!--key__text-->
+                        </div><!--key-->
+                        {{/yellow-key}}
+                        {{/spreadsheet.UWA_key--cbn}} 
+                      </div><!--key__container-->
+                      {{#UWA_notes--cbn}}<div class="planTable__note">Note: {{{UWA_notes--cbn}}}</div><!--planTable__note-->{{/UWA_notes--cbn}}
+                    </div><!--planTable__container-->
+                    {{/block.UWA_study-plan-table--cbn}}
+
+                    {{#block.UWA_break-out--cbn}}
+                    <div class="breakOut" data-column-item>
+                      <div class="breakOut__text">{{{UWA_break-out-text--cbn}}}</div><!--callout__text-->
+                    </div><!--callout-->
+                    {{/block.UWA_break-out--cbn}}
+
+                    {{#block.UWA_spacer--cbn}}
+                    <div class="spacer spacer--backPage" style="height: {{UWA_spacerHeight--cbn}}{{UWA_spacerHeight--cbn}}25{{UWA_spacerHeight--cbn}}px" data-column-item>
+                    </div><!--spacer-->
+                    {{/block.UWA_spacer--cbn}}
+
+                    {{#block.UWA_divider--cbn}}
+                    <div class="divider"style="transform: translateY(-{{{UWA_divider--cbn}}}{{^UWA_divider--cbn}}8{{/UWA_divider--cbn}}pt)" data-column-item></div><!--divider-->
+                    {{/block.UWA_divider--cbn}}
+
+                    {{#block.column-break}}
+                    <div data-column-break></div>
+                    {{/block.column-break}}
+
+                    {{/collection.UWA_content--cbn}}
+                  </div><!--data-original-content-->
+                </div><!--column-->
+
+                {{/block.UWA_content-section--cbn}}
+                {{/collection.UWA_page-content--cbn}}
+
+              </div><!--column__containerInner-->
+            </div><!--column__container--backPage-->
+
+          </div><!--body--backPage-->
+
+          <div class="footer footer--contactDetailsAndLogo footer--getInTouchDetails">
+            <div class="contactDetails__containerWrapper" data-idd-target="contact-details"></div><!--contactDetails__containerWrapper-->
+
+            <img src="{{{account.logos.formal-primary}}}" class="logo logo--footer"><!--logo-->
+          </div><!--footer-->
+
+          <div class="footer footer--contactDetailsAndLogo footer--internationalDetails">
+            <div class="contactDetails__containerWrapper">
+
+              <div class="contactDetails__container contactDetails__container--domestic">
+
+                <div class="contactDetails__containerItem">
+                  <div class="contactDetails__heading">DOMESTIC<div class="contactDetails__decoration"></div></div><!--contactDetails__heading-->
+
+                  <div class="contactDetails__row">
+
+                    <div class="contactDetails">
+                      <div class="contactDetails__text contactDetails__text--label">CALL US</div><!--contactDetails__text-->
+                      <div class="contactDetails__text contactDetails__text--value">131 UWA (131 892)</div><!--contactDetails__text-->
+                    </div><!--contactDetails-->
+
+                    <div class="contactDetails">
+                      <div class="contactDetails__text contactDetails__text--label">CHAT ONLINE</div><!--contactDetails__text-->
+                      <div class="contactDetails__text contactDetails__text--value">uwa.edu.au/study<br>Mon–Fri 2.30–4.30pm (AWST)</div><!--contactDetails__text-->
+                    </div><!--contactDetails-->    
+
+                    <div class="contactDetails">
+                      <div class="contactDetails__text contactDetails__text--label">FAQs</div><!--contactDetails__text-->
+                      <div class="contactDetails__text contactDetails__text--value">ask.uwa.edu.au</div><!--contactDetails__text-->
+                    </div><!--contactDetails-->
+
+                    <div class="contactDetails">
+                      <div class="contactDetails__text contactDetails__text--label">EMAIL US</div><!--contactDetails__text-->
+                      <div class="contactDetails__text contactDetails__text--value">future-students<br>@uwa.edu.au</div><!--contactDetails__text-->
+                    </div><!--contactDetails-->
+
+                    <div class="contactDetails">
+                      <div class="contactDetails__text contactDetails__text--label">VISIT US</div><!--contactDetails__text-->
+                      <div class="contactDetails__text contactDetails__text--value">Student Central,<br>Perth campus</div><!--contactDetails__text-->
+                    </div><!--contactDetails-->
+
+                  </div><!--contactDetails__row-->
+
+                </div><!--contactDetails__containerItem-->
+
+              </div><!--contactDetails__container-->
+
+              <div class="contactDetails__container contactDetails__container--international">
+
+                <div class="contactDetails__containerItem">
+                  <div class="contactDetails__heading">INTERNATIONAL<div class="contactDetails__decoration"></div></div><!--contactDetails__heading-->
+
+                  <div class="contactDetails__row">
+
+                    <div class="contactDetails">
+                      <div class="contactDetails__text contactDetails__text--label">CALL US</div><!--contactDetails__text-->
+                      <div class="contactDetails__text contactDetails__text--value">+61 6488 1000<br>Monday–Friday<br>8.30am–5.00pm (AWST)</div><!--contactDetails__text-->
+                    </div><!--contactDetails-->
+
+                    <div class="contactDetails">
+                      <div class="contactDetails__text contactDetails__text--label">CHAT ONLINE</div><!--contactDetails__text-->
+                      <div class="contactDetails__text contactDetails__text--value">uwa.edu.au/study<br>Monday–Friday<br>2.30–4.30pm (AWST)</div><!--contactDetails__text-->
+                    </div><!--contactDetails-->    
+
+                    <div class="contactDetails">
+                      <div class="contactDetails__text contactDetails__text--label">EMAIL US</div><!--contactDetails__text-->
+                      <div class="contactDetails__text contactDetails__text--value">international<br>@uwa.edu.au</div><!--contactDetails__text-->
+                    </div><!--contactDetails-->
+
+                    <div class="contactDetails">
+                      <div class="contactDetails__text contactDetails__text--label">ASK A QUESTION</div><!--contactDetails__text-->
+                      <div class="contactDetails__text contactDetails__text--value">appointments.applications.uwa.edu.au</div><!--contactDetails__text-->
+                    </div><!--contactDetails-->          
+
+                  </div><!--contactDetails__row-->
+
+                </div><!--contactDetails__containerItem-->
+
+              </div><!--contactDetails__container-->
+
+            </div><!--contactDetails__containerWrapper-->
+
+            <img src="{{{account.logos.formal-primary}}}" class="logo logo--footer"><!--logo-->
+          </div><!--footer--backPage-->
+
+          <div class="cricos__container" data-dlc-hook="container">
+            <div class="exportId">{{#metadata}}OF: {{export_id}}{{/metadata}}{{^metadata}}OF: 123456789{{/metadata}}</div><!--exportId-->
+            <div class="cricos">{{{account.snippets.cricos}}}</div><!--cricos-->          
+          </div><!--cricos__container-->
+
+
+        </div><!--container fit--backPage-->
+
+      </div><!--bleed-->
+
+    </div><!--page-->
+    {{/block.UWA_back-page--cbn}}
+    {{/collection.UWA_back-page--cbn}}
+
+    <script>
+      window.showCrop = {{show-crop}}{{^show-crop}}true{{/show-crop}};
+    </script>
+    <script src="js/main.js"></script>   
+    <script src="js/prefixfree.js"></script>
+    <script src="js/char-limit.js"></script>
+    <script src="js/check-export-mode.js"></script>
+    <script src="js/max-line-check.js"></script>
+    <script src="js/max-height-check.js"></script>
+    <script src="js/hide-empty-titles.js"></script>
+    <script src="js/custom-rich-text.js"></script>
+    <script src="js/dynamic-inject.js"></script>
+    <script src="js/text-fit-min.js"></script>
+    <script src="js/fontfaceobserver.js"></script>
+    <script src="js/all-images-loaded-callback.js"></script>
+    <script src="https://outfit-assets-production.s3-accelerate.amazonaws.com/scripts/textfit.0.0.4.min.js" type="text/javascript"></script>
+
+    <script>
+
+      console.clear();
+
+      // Tracking text changes and firing text restriction functions (mutationObserver)
+      const overflowObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          maxLineCheck();
+          maxHeightCheck();
+          charLimit();
+          hideEmptyTitles();
+          headingHeightCheck();
+        });
+      });
+
+      const injectObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          injectDynamicContent();
+        });
+      });      
+
+      const injectSources = document.querySelectorAll('[data-target-id]');
+
+      overflowObserver.observe(document.body, {
+        attributes: false,
+        characterData: true,
+        childList: true,
+        subtree: true,
+        attributeOldValue: false,
+        characterDataOldValue: true
+      });
+
+      if ( injectSources.length > 0 ) {
+        injectSources.forEach(src => {
+          injectObserver.observe(src, {
+            attributes: false,
+            characterData: true,
+            childList: true,
+            subtree: true,
+            attributeOldValue: false,
+            characterDataOldValue: true
+          });            
+        });
+      }    
+
+
+
+      // Calling text size restriction functions once the fonts are loaded
+      // All external font-families need to be added to 'fonts' array
+      document.addEventListener('DOMContentLoaded', function(event) {
+        const fonts = ['TT Norms Pro', 'novel-pro'];
+        const fontObservers = [];
+
+        fonts.forEach(font => {
+          const obs = new FontFaceObserver(font);
+          fontObservers.push(obs.load())
+        });
+
+        Promise.all(fontObservers).then(() => {
+          injectDynamicContent();
+          hideEmptyTitles();
+          allImagesLoadedCallback();
+          dataTableController();
+
+          document.dispatchEvent(new Event('printready'));
+        });
+      });      
+
+      checkCrop();
+      checkExport();
+      charLimit();
+
+      // TextFit function decreases the font of the selected element to make it fit in single line (if needed, uncomment the code bellow)
+      // TEXTFIT SHOULD NOT BE CALLED MORE THAN ONCE AND SHOULD NOT BE PLACED INSIDE THE MUTATION OBSERVER
+      TextFit.fit({
+        selector: '.textFit'
+      });
+
+      /*** Helper function for getting all the table empty columns ***/
+      function getEmptyColumns(table) {
+        const emptyColumns = [];
+        const emptyColumnsCells = [];
+
+        const totalColumns = table.querySelectorAll('tr:first-child td').length; 
+        const rowsLength = table.querySelectorAll('tr').length;
+        const colsLength = table.querySelectorAll('td').length;
+
+        for (let i = 1; i <= totalColumns; i++) {
+          const columnEmptyCells = table.querySelectorAll(`.empty-col-${i}`);
+
+          if (columnEmptyCells.length === rowsLength)
+            emptyColumns.push(columnEmptyCells);
+        } 
+
+        return emptyColumns;
+      }                  
+
+      function emptyColumnsCheck() {
+        const tables = document.querySelectorAll('.js-emptyColumnsCheck-table');
+
+        for (const table of tables) {
+          const emptyColumns = getEmptyColumns(table);
+
+          for ( const emptyColumnCells of emptyColumns ) {
+            for ( const emptyColumnCell of emptyColumnCells ) {
+              emptyColumnCell.style.display = 'none';
+            }
+          }
+        }
+      }
+
+      emptyColumnsCheck();
+
+      function columnSizesCheck() {
+        const tables = document.querySelectorAll('[data-column-sizes]');
+        for ( const table of tables ) {
+          const columnsSizes = table.dataset.columnSizes.split(',');
+          const total = columnsSizes.reduce((sum, size) => { 
+            return parseInt(size) + sum;
+          }, 0);
+
+          if ( total > 100 ) {
+            table.classList.add('invalid-table');
+          }
+        }
+      }
+
+      function tableBorderController() {
+        const tables = document.querySelectorAll('[data-border-styles');
+        for ( const table of tables ) {
+          const borderStyles = table.dataset.borderStyles === '' ? '[]' : table.dataset.borderStyles;
+          const borderStylesFormated = JSON.parse(borderStyles);
+
+          for ( const borderStyleFormated of borderStylesFormated ) {
+            table.classList.add(`styledBorder-${borderStyleFormated}`);
+          }
+        }        
+      }
+
+      function flexiTableColumnSizeController() {
+        const flexiTables = document.querySelectorAll('[data-flexi-column-sizes]');
+
+        for (const flexiTable of flexiTables) {
+          const emptyColumnsCount = getEmptyColumns(flexiTable).length;   
+          const totalColumnsCount = flexiTable.querySelectorAll('tr:first-child td').length;          
+
+          const parentWidthPercent = flexiTable.parentNode.offsetWidth / 100;
+          const columnSizesData = flexiTable.dataset.flexiColumnSizes === '' ? '[]' : flexiTable.dataset.flexiColumnSizes;
+          const columnSizes = JSON.parse(columnSizesData);
+          let dynamicColumnsCount = 0;
+
+          columnSizes.forEach((columnSize, index) => {
+            const size = columnSize === 0 ? 'auto' : `${columnSize * parentWidthPercent}px`;
+            if (size !== 'auto') {
+              flexiTable.querySelector(`tr td:nth-child(${index + 1})`).style.width = size;
+              dynamicColumnsCount += 1;
+            }
+          });
+
+          const total = columnSizes.reduce((sum, size) => {
+            return parseInt(size) + sum;
+          }, 0);
+
+          // Checking if all the visible columns have the dynamic width set
+          if (dynamicColumnsCount === (totalColumnsCount - emptyColumnsCount)) {
+            flexiTable.style.width = 'auto';
+          }
+
+          // Checking if the total sum of all dynamically set column size input exceeds 100%
+          if (total > 100) flexiTable.classList.add('invalid-table')
+
+          // Checking if real widths of the columns exceed 100%
+          const invalidColumnsCheck = [...flexiTable.querySelectorAll('tr:first-child td')].some(td => {
+            const tdStyle = window.getComputedStyle(td);
+            if ( td.offsetWidth === 0 && tdStyle.display !== 'none') {
+              return true;
+            }
+          });
+
+          if ( invalidColumnsCheck ) flexiTable.classList.add('invalid-table');
+        }
+      }
+
+      function setTableHeading() {
+        const tableWrappers = document.querySelectorAll('[data-js-hook-set-table-heading="outer"]');
+
+        for (const wrapper of tableWrappers) {
+          const headingWrapper = wrapper.querySelector('[data-js-hook-set-table-heading="wrapper"]');
+          const table = wrapper.querySelector('[data-js-hook-set-table-heading="table"]');
+          const tableWidth = table.offsetWidth === 0 ? 'auto' : table.offsetWidth;
+
+          headingWrapper.style.width = `${tableWidth}px`;
+        }
+      }
+
+      function columnCounter() {
+        const pages = document.querySelectorAll('[data-column-counter-hook="page"]');
+
+        for ( const page of pages ) {
+          const layout = page.dataset.columnCounterLayout;
+          const columnCount = page.querySelectorAll('[data-column-counter-hook="column"]').length;
+          const errorPopup = page.querySelector('[data-column-counter-hook="error-popup"]');         
+
+          if ( layout == 'full-image' &&  columnCount > 1 ) errorPopup.style.display = 'block';
+
+          page.dataset.columnCounterCount = columnCount;
+        }
+
+      }
+
+      function headingHeightCheck() {
+        const heading = document.querySelector('[data-heading-height-check-hook="heading"]');
+
+        if ( heading === null ) return;
+
+        if ( heading.offsetHeight < 70 ) {
+          heading.classList.add('u-compact-heading');
+        }
+      }   
+
+      function displayLastCricos() {
+        const allCricos = document.querySelectorAll('[data-dlc-hook="container"]');
+
+        if ( allCricos.length !== 0 ) {
+          const lastCricos = allCricos[allCricos.length-1];  
+          lastCricos.style.display = "flex";
+        }
+      }
+
+      function planTableController() {
+        const containers = document.querySelectorAll('[data-ptc-hook="table-container"]');
+
+        for (const container of containers) {
+          const tableYears = container.querySelectorAll('[data-ptc-hook="table-year"]');
+          const tableColors = [...container.querySelectorAll('[data-ptc-color]')].map(element => element.dataset.ptcColor);
+          const keyTable = container.querySelector('[data-ptc-hook="key-container"]');
+          const activeKeyColors = [...keyTable.querySelectorAll('[data-ptc-key-color]')].map(element => {
+            const name = element.dataset.ptcKeyColor;
+            const abbr = element.dataset.ptcKeyColorAbbr;
+
+            return { name, abbr };
+          });
+
+          let invalidColors = [];
+
+          for (const [index, tableYear] of tableYears.entries()) {
+            const yearIndex = tableYear.querySelector('[data-ptc-hook="year-index"]');
+            const periods = tableYear.querySelectorAll('[data-ptc-hook="period"]');
+            const periodType = periods.length === 3 ? 'tri' : tableYear.dataset.ptcPeriodType;
+
+            yearIndex.innerText = `YR${index + 1}`;
+
+            for (const [index, period] of periods.entries()) {
+              period.innerText = `${periodType.toUpperCase()} ${index + 1}`;
+            }
+          }
+
+          for (const activeKeyColor of activeKeyColors) {
+            if (tableColors.indexOf(activeKeyColor.name) === -1 && tableColors.indexOf(activeKeyColor.abbr) === -1) {
+              invalidColors.push(activeKeyColor.name);
+            }
+          }
+
+          if ( invalidColors.length ) {
+            const errorMessage = `These colors are not used in any Study Plan Table: ${invalidColors.join(', ')}`;
+
+            container.classList.add('invalid-table');
+            container.dataset.ptcErrorMessage = errorMessage;
+          }
+        }
+      }
+
+      function dynamicBlockColumns() {
+        var dynamicColumns = document.querySelectorAll(
+          "[data-dynamic-collection-columns]"
+        );
+
+        dynamicColumns.forEach((dynamicColumn) => {
+          var content = dynamicColumn.querySelector("[data-original-content]");
+          var columnOutput = dynamicColumn.querySelector("[data-dynamic-content]");
+
+          if (content == null || columnOutput == null) return;
+          var columnItems = content.querySelectorAll(
+            "[data-column-item], [data-column-break]"
+          );
+          var columnArr = [];
+          var currentColumnContent = [];
+
+          columnItems.forEach((item) => {
+            if (item.dataset.columnBreak == undefined) {
+              currentColumnContent.push(item);
+            } else {
+              columnArr.push(currentColumnContent);
+              currentColumnContent = [];
+            }
+          });
+
+          if (currentColumnContent.length != 0) {
+            columnArr.push(currentColumnContent);
+          }
+          var output = dynamicColumn.querySelector("[data-dynamic-content]");
+          output.innerHTML = "";
+          columnArr.forEach((column, index) => {
+            var columnDom = document.createElement("div");
+            columnDom.setAttribute("class", "column-dynamic");
+
+            column.forEach((el) => {
+              columnDom.innerHTML += el.outerHTML;
+            });
+
+            output.appendChild(columnDom);
+          });
+        });
+      }
+
+      function checkColumns(){
+        var dynamicColumns = document.querySelectorAll(
+          "[data-dynamic-collection-columns]"
+        );
+
+        dynamicColumns.forEach((dynamicColumn) => {
+          var columns = dynamicColumn.querySelectorAll('.column-dynamic');
+          var columnCount = columns.length;
+          var popup = dynamicColumn.querySelector(".dynamicColumnsPopup");
+          var maxCol = 3;
+
+          if (columnCount > maxCol) {
+            var columnOverset = columnCount - maxCol;
+            var plural = columnOverset > 1 ? "s" : "";
+            popup.style.display = "block";
+            popup.querySelector(".dynamicColumnsPopup__text").innerText = `You have added too many columns. Please remove ${columnOverset} column` + plural;
+          }    
+
+          if ( columnCount === 3 ) {
+            dynamicColumn.classList.add('hasThreeColumns');
+          } else if ( columnCount === 2 ) {
+            dynamicColumn.classList.add('hasTwoColumns');
+          }
+          
+        });
+      }  
+
+      function injectDynamicData() {
+        const sources = document.querySelectorAll('[data-idd-hook="source"]');
+
+        for ( const source of sources ) {
+          const targetId = source.dataset.iddTargetId;
+          const targets = document.querySelectorAll(`[data-idd-target="${targetId}"]`);
+          const sourceHTML = source.innerHTML;
+
+          for ( const target of targets ) {
+            target.innerHTML = sourceHTML;
+          }
+        }
+      }
+
+      // Setting the width of the first columns of the dataTable 
+      // per the width of the widest first column
+      // if the width isn't set manually per input
+      function dataTableController() {
+        const tables = document.querySelectorAll('[data-dtc-hook="table"]');
+
+        for ( const table of tables ) {
+          const leftCells = [...table.querySelectorAll('[data-dtc-hook="left-cell"]')];
+          const leftCellWidthSet = leftCells[0].dataset.dtcWidthSet === 'true' ? true : false;
+
+          if ( !leftCellWidthSet ) {
+            const leftCellsWidths = leftCells.map(leftCell => leftCell.offsetWidth);
+            const maxLeftCellWidth = Math.max.apply(Math, leftCellsWidths) + 1;
+
+            for ( const leftCell of leftCells ) {
+              leftCell.style.width = `${maxLeftCellWidth}px`;
+            }
+          }
+        }
+      }
+
+      // Setting the widths and height of the prtner logos
+      function partnerLogoController() {
+        const containers = document.querySelectorAll('[data-plc-hook="container"]');
+
+        for ( const container of containers ) {
+          const logos = container.querySelectorAll('[data-plc-hook="logo"]');
+
+          container.dataset.plcLogoCount = logos.length;
+
+          for ( const logo of logos ) {
+            const { width, height } = logo.getBoundingClientRect();
+            const proportion = width / height;
+
+            if ( proportion < 0.62 ) {
+              logo.dataset.plcLogoOrientation = 'portrait'
+            } else if ( proportion > 1.45 ) {
+              logo.dataset.plcLogoOrientation = 'landscape'
+            } else {
+              logo.dataset.plcLogoOrientation = 'square'
+            }
+          }
+        }
+      }      
+
+      setInterval(() => {
+        partnerLogoController();
+      }, 2000);
+
+      dynamicBlockColumns();
+      checkColumns();
+      injectDynamicData();
+      displayLastCricos()
+      headingHeightCheck();
+      columnCounter();      
+      flexiTableColumnSizeController();
+      columnSizesCheck();
+      tableBorderController();
+      setTableHeading();  
+
+      planTableController();
+
+    </script>
+
+    <script type="text/javascript">
+      // Add many fallbacks for Print Ready
+      document.addEventListener('DOMContentLoaded', function(event) {
+        document.dispatchEvent(new Event('printready'));
+      });
+
+      setTimeout(function() {
+        document.dispatchEvent(new Event('printready'));
+      }, 15000);
+
+      document.dispatchEvent(new Event('printready'));
+    </script>
+  </body>
+</html>
